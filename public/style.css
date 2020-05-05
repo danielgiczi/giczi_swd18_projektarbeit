@@ -1,0 +1,78 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body {
+    background: #eee;
+    min-height: 100vh;
+}
+
+#app{
+  display: flex;
+  min-height: 100vh;
+}
+
+#wrapper{
+  box-shadow: 0px 0px 6px #333;
+  margin:auto;
+  position: relative;
+}
+
+#wrapper canvas{
+  display: block;
+}
+
+#controls {
+
+}
+
+.coords {
+  font-size: 1rem;
+  color:#666;
+}
+
+.coords div {
+  height:var(--tile-size);
+}
+
+#top-coords {
+  position: absolute;
+  left:0;
+  top:-1.5rem;
+}
+
+#top-coords div,
+#bottom-coords div{
+  display: inline-block;
+  height:auto;
+  width:var(--tile-size);
+  text-align: center;
+}
+
+#left-coords div,
+#right-coords div{
+  line-height:var(--tile-size);
+  vertical-align: middle;
+}
+
+
+#left-coords {
+  position: absolute;
+  left:-1.5rem;
+  top:0;
+}
+
+#right-coords{
+  position: absolute;
+  right:-1.5rem;
+  top:0;
+}
+
+#bottom-coords{
+  position: absolute;
+  bottom:-1.5rem;
+  left:0;
+}
