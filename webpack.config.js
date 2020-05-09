@@ -6,7 +6,7 @@ module.exports = {
   mode: 'development',
   entry: [
     'webpack-hot-middleware/client?reload=true', 
-    './index.js'
+    './src/index.js'
   ],
   devtool: 'inline-source-map',
   devServer: {
