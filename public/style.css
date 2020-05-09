@@ -10,6 +10,13 @@ body {
     min-height: 100vh;
 }
 
+#credits {
+  position: fixed;
+  right:10px;
+  top:10px;
+  color:#666;
+}
+
 #app{
   display: flex;
   min-height: 100vh;

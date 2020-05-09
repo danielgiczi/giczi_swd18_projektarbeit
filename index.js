@@ -98,17 +98,45 @@ const s = ( sk ) => {
           currY+=imgHeight;
         })
 
-        sk.fill("aqua");
-        sk.circle(coordToCenteredPosition(startCoordX), coordToCenteredPosition(startCoordY), 24)        
+
+        //probePositon(2,8, 2,7);
+
+        
 
         sk.fill("green")
         sk.circle(coordToCenteredPosition(destinationCoordX), coordToCenteredPosition(destinationCoordY), 24)        
-
     };
+
+    let predProbes = [ [ [2,8], [2,7], [2,6], [2,5], [3,5], [3,4],[4,4], [4,3] ]]
+    let predProbeInx = 1;
+
+    let simulationEveryNthFrame = 20;
+    let frameCounter = 0;
   
     sk.draw = () => {
-      
 
+      if(frameCounter > simulationEveryNthFrame) {
+        frameCounter = 0;
+
+        predProbes.forEach((probe) => {
+          if(!probe[predProbeInx]) {
+            return false;
+          }
+
+          let currX = probe[predProbeInx-1][0]
+          let currY = probe[predProbeInx-1][1]
+  
+          let probeX = probe[predProbeInx][0]
+          let probeY = probe[predProbeInx][1]        
+          probePositon(currX, currY, probeX, probeY)
+        })
+
+        predProbeInx++;
+      }
+
+      sk.fill("red");
+      sk.circle(coordToCenteredPosition(startCoordX), coordToCenteredPosition(startCoordY), 24)        
+      frameCounter++;
     };
 
     function coordToPosition(coord) {
@@ -119,6 +147,17 @@ const s = ( sk ) => {
       return coordToPosition(coord) + imgWidth/2
     }
     
+    let probes = [];
+    function probePositon(currentX, currentY, probeX, probeY) {
+      sk.stroke("#00ffff");
+      sk.strokeWeight(8);
+      sk.line(coordToCenteredPosition(currentX), 
+      coordToCenteredPosition(currentY),
+      coordToCenteredPosition(probeX),
+      coordToCenteredPosition(probeY))
+      sk.stroke("#000");
+      sk.strokeWeight(1)
+    }
 
   };
   
