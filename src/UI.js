@@ -8,18 +8,21 @@ function UI(sk, imgWidth, imgHeight) {
     this.imgM3;
     this.imgM4;
     this.imgM5;
+    this.imgWall;
 
     this.imgWidth = imgWidth;
     this.imgHeight = imgHeight;
 }
 
 UI.prototype.preload = function () {
-    this.imgM0 = this.sk.loadImage("public/tiles/tilemap_v1_07.png")
+    //this.imgM0 = this.sk.loadImage("public/tiles/tilemap_v1_07.png")
+    this.imgM0 = this.sk.loadImage("public/tiles/tilemap_v1_09.png")
     this.imgM1 = this.sk.loadImage("public/tiles/tilemap_v1_01.png")
     this.imgM2 = this.sk.loadImage("public/tiles/tilemap_v1_02.png")
     this.imgM3 = this.sk.loadImage("public/tiles/tilemap_v1_03.png")
     this.imgM4 = this.sk.loadImage("public/tiles/tilemap_v1_04.png")
     this.imgM5 = this.sk.loadImage("public/tiles/tilemap_v1_05.png")
+    this.imgWall = this.sk.loadImage("public/tiles/tilemap_v1_10.png")
 }
 
 UI.prototype.setup = function (map) {
@@ -63,6 +66,7 @@ UI.prototype.setup = function (map) {
                 case -3: imgToDraw = this.imgM3; break;
                 case -4: imgToDraw = this.imgM4; break;
                 case -5: imgToDraw = this.imgM5; break;
+                case 8: imgToDraw = this.imgWall; break;
             }
 
             this.sk.image(imgToDraw, currX, currY, this.imgWidth, this.imgHeight)

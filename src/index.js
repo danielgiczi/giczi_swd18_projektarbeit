@@ -11,11 +11,11 @@ import UI from "./UI"
 new p5(( sk ) => {
     let ui = new UI(sk, 64, 64);
 
-    let startCoordX = 2;
+    let startCoordX = 1;
     let startCoordY = 8;
 
-    let destinationCoordX = 7;
-    let destinationCoordY = 1;
+    let destinationCoordX = 6;
+    let destinationCoordY = 2;
 
     let map = new Map();
     
@@ -34,7 +34,7 @@ new p5(( sk ) => {
 
     let simulationEveryNthFrame = 20;
     let frameCounter = 0;
-    let algoirthm = new AStarAlgorithm(startCoordX,startCoordY, destinationCoordX, destinationCoordY, probePositon);
+    let algoirthm = new AStarAlgorithm(startCoordX,startCoordY, destinationCoordX, destinationCoordY, probePositon,map);
     //let algoirthm = new PredeterminedAlgorith(probePositon);
   
     sk.draw = () => {
