@@ -59,13 +59,13 @@ UI.prototype.setup = function (map) {
         currX = 0;
         row.forEach((val) => {
             let imgToDraw;
-            switch (val) {
+            switch (Math.abs(val)) {
                 case 0: imgToDraw = this.imgM0; break;
-                case -1: imgToDraw = this.imgM1; break;
-                case -2: imgToDraw = this.imgM2; break;
-                case -3: imgToDraw = this.imgM3; break;
-                case -4: imgToDraw = this.imgM4; break;
-                case -5: imgToDraw = this.imgM5; break;
+                case 1: imgToDraw = this.imgM1; break;
+                case 2: imgToDraw = this.imgM2; break;
+                case 3: imgToDraw = this.imgM3; break;
+                case 4: imgToDraw = this.imgM4; break;
+                case 5: imgToDraw = this.imgM5; break;
                 case 8: imgToDraw = this.imgWall; break;
             }
 

@@ -59,7 +59,7 @@ AStarAlgorithm.prototype.work = function () {
     this.OpenList  = this.OpenList.sort((node1,node2) => node1.f > node2.f);
     var B = this.OpenList.shift();
     if (B.equals(this.G)) {
-        this.goalReached();
+        this.goalReached(B);
         return;
     }
 
@@ -69,7 +69,9 @@ AStarAlgorithm.prototype.work = function () {
     connectedNodes = connectedNodes.sort((node1,node2) => node1.f > node2.f);
 
     var self = this
-    connectedNodes.forEach(function(C){
+    for(var childIndex = 0; childIndex < connectedNodes.length; childIndex++)
+    {
+        var C = connectedNodes[childIndex];
         self.calculateCostsForNode(C);
         self.probePosition(B.x, B.y, C.x, C.y);
 
@@ -79,20 +81,19 @@ AStarAlgorithm.prototype.work = function () {
         var closedListContains = arrayContainsNode(self.ClosedList, C)
 
         if (C.equals(self.G)) {
-            self.goalReached();
-            return false;
+            self.goalReached(C);
+            break;
         }
         else if(openListContains.contains) {  
-            if(C.f < openListContains.node.f + 1) {
+            if(C.f > openListContains.node.f) {
                 console.log("skip");
-                return;
+                continue;
             }
         }
         else if(closedListContains.contains){
-            B.children.push(C);
-            if(C.f < closedListContains.node.f + 1) {
+            if(C.f > closedListContains.node.f + 1) {
                 console.log("skip");
-                return;
+                continue;
             }
             else{
                 self.OpenList.push(C);
@@ -101,25 +102,19 @@ AStarAlgorithm.prototype.work = function () {
         else{
             self.OpenList.push(C);
         }
-    })
+    }
 }
 
-AStarAlgorithm.prototype.goalReached = function() {
+AStarAlgorithm.prototype.goalReached = function(goal) {
     this.stop = true;
-    console.log("reached the goal");
+    console.log("reached the goal", goal);
 
-    if(!this.P.next) {
-        console.log("error determining path");
-        return;
-    }
-
-
-    var node = this.P;
-    var nextNode = this.P.next;
-    while(!!node.next) {
+    var node = goal;
+    var nextNode = node.parent;
+    while(!!node.parent) {
         this.drawCalculated(node.x, node.y, nextNode.x, nextNode.y);
         node = nextNode;
-        nextNode = node.next;
+        nextNode = node.parent;
     }
 }
 

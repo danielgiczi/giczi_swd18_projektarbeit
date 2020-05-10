@@ -57,7 +57,8 @@ var map4 = `
 `;
 
 var mapTest = `
-    S 0 0 0 D
+    S 0 0 8 D
+    0 0 0 0 0
 `;
 
 function Map() {

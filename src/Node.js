@@ -7,8 +7,6 @@ function Node(x, y) {
     this.h = 0;
 
     this.parent;
-    this.next;
-    this.children = [];
 }
 
 Node.prototype.equals = function (other) {
@@ -25,7 +23,6 @@ Node.prototype.clone = function() {
     if(this.next){
         clone.next = this.next.clone();
     }
-    clone.children = [];
 
     return clone;
 }

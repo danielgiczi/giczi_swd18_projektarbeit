@@ -56,7 +56,7 @@ new p5(( sk ) => {
     }
 
     function drawCalculated(currentX, currentY, probeX, probeY) {
-      sk.stroke("#00ff2b");
+      sk.stroke("#31bd48");
       sk.strokeWeight(8);
       sk.line(
         ui.coordToCenteredPosition(currentX), 
