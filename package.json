@@ -17,9 +17,7 @@
   },
   "homepage": "https://github.com/danielgiczi/giczi_swd18_projektarbeit#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "p5": "^1.0.0",
-    "processing": "^0.2.0"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",

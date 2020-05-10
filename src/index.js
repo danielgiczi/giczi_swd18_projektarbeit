@@ -1,8 +1,6 @@
 import '../public/reset.css';
 import '../public/style.css';
 
-import * as p5 from 'p5';
-
 import PredeterminedAlgorith from "./PredeterminedAlgorithm"
 import AStarAlgorithm from "./AStartAlgorithm"
 import Map from "./Map"
@@ -11,12 +9,6 @@ import UI from "./UI"
 new p5(( sk ) => {
     let ui = new UI(sk, 64, 64);
 
-    let startCoordX = 1;
-    let startCoordY = 8;
-
-    let destinationCoordX = 6;
-    let destinationCoordY = 2;
-
     let map = new Map();
     
     sk.preload = () => {
@@ -24,17 +16,12 @@ new p5(( sk ) => {
     }
 
     sk.setup = () => {
-        ui.setup(map);
-
-        sk.fill("green")
-        sk.circle(
-          ui.coordToCenteredPosition(destinationCoordX), 
-          ui.coordToCenteredPosition(destinationCoordY), 24)        
+        ui.setup(map);     
     };
 
     let simulationEveryNthFrame = 10;
     let frameCounter = 0;
-    let algoirthm = new AStarAlgorithm(startCoordX,startCoordY, destinationCoordX, destinationCoordY, probePositon,map);
+    let algoirthm = new AStarAlgorithm(map.startX,map.startY, map.destX, map.destY, probePositon, drawCalculated,map);
     //let algoirthm = new PredeterminedAlgorith(probePositon);
   
     sk.draw = () => {
@@ -45,13 +32,31 @@ new p5(( sk ) => {
       }
 
       sk.fill("red");
-      sk.circle(ui.coordToCenteredPosition(startCoordX), 
-                ui.coordToCenteredPosition(startCoordY), 24)        
+      sk.circle(ui.coordToCenteredPosition(map.startX), 
+                ui.coordToCenteredPosition(map.startY), 24)        
+
+      sk.fill("green")
+      sk.circle(
+        ui.coordToCenteredPosition(map.destX), 
+        ui.coordToCenteredPosition(map.destY), 24)   
+
       frameCounter++;
     };
 
     function probePositon(currentX, currentY, probeX, probeY) {
       sk.stroke("#00ffff");
+      sk.strokeWeight(8);
+      sk.line(
+        ui.coordToCenteredPosition(currentX), 
+        ui.coordToCenteredPosition(currentY),
+        ui.coordToCenteredPosition(probeX),
+        ui.coordToCenteredPosition(probeY));
+      sk.stroke("#000");
+      sk.strokeWeight(1)
+    }
+
+    function drawCalculated(currentX, currentY, probeX, probeY) {
+      sk.stroke("#00ff2b");
       sk.strokeWeight(8);
       sk.line(
         ui.coordToCenteredPosition(currentX), 

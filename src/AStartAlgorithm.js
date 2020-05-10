@@ -1,9 +1,10 @@
 import Node from "./Node"
 
-function AStarAlgorithm(startX, startY, goalX, goalY, probePosition, map) {
+function AStarAlgorithm(startX, startY, goalX, goalY, probePosition, drawCalculated, map) {
     this.P = new Node(startX, startY);
     this.G = new Node(goalX, goalY);
     this.probePosition = probePosition;
+    this.drawCalculated = drawCalculated;
     this.map = map;
 
     this.calculateCostsForNode(this.P);
@@ -22,32 +23,6 @@ AStarAlgorithm.prototype.getCostFromStartToNode = function (node) {
 }
 
 AStarAlgorithm.prototype.getEstimatedCostFromStartToNode = function (node) {
-    /*
-    var cost = 0;
-    var currX = this.P.x;
-    while(currX != node.x) {
-        if(node.x > currX) {
-            currX++;
-        }
-        else if(node.x < currX) {
-            currX--;
-        }
-        cost += this.map.getCoordCost(currX, node.y) + 1;
-    }
-
-    var currY = this.P.y;
-    while(currY != node.y) {
-        if(node.y > currY) {
-            currY++;
-        }
-        else if(node.y < currY) {
-            currY--;
-        }
-        cost += this.map.getCoordCost(currX, currY) + 1;
-    }
-
-    return cost;*/
-
     if(!node.parent) {
         return 0;
     }
@@ -77,14 +52,14 @@ AStarAlgorithm.prototype.work = function () {
     
     if(this.OpenList.length == 0) {
         console.log("no path can be found");
+        this.stop = true;
         return;
     }
 
     this.OpenList  = this.OpenList.sort((node1,node2) => node1.f > node2.f);
     var B = this.OpenList.shift();
     if (B.equals(this.G)) {
-        this.stop = true;
-        console.log("reached the goal");
+        this.goalReached();
         return;
     }
 
@@ -104,20 +79,19 @@ AStarAlgorithm.prototype.work = function () {
         var closedListContains = arrayContainsNode(self.ClosedList, C)
 
         if (C.equals(self.G)) {
-            self.stop = true;
-            console.log("reached the goal");
+            self.goalReached();
             return false;
         }
         else if(openListContains.contains) {  
-            if(C.f > openListContains.node.f) {
-                console.log("skip successor"); 
+            if(C.f < openListContains.node.f + 1) {
+                console.log("skip");
                 return;
             }
         }
         else if(closedListContains.contains){
             B.children.push(C);
-            if(C.f > closedListContains.node.f) {
-                console.log("skip successor"); 
+            if(C.f < closedListContains.node.f + 1) {
+                console.log("skip");
                 return;
             }
             else{
@@ -128,7 +102,25 @@ AStarAlgorithm.prototype.work = function () {
             self.OpenList.push(C);
         }
     })
+}
 
+AStarAlgorithm.prototype.goalReached = function() {
+    this.stop = true;
+    console.log("reached the goal");
+
+    if(!this.P.next) {
+        console.log("error determining path");
+        return;
+    }
+
+
+    var node = this.P;
+    var nextNode = this.P.next;
+    while(!!node.next) {
+        this.drawCalculated(node.x, node.y, nextNode.x, nextNode.y);
+        node = nextNode;
+        nextNode = node.next;
+    }
 }
 
 function arrayContainsNode(array, node) {
@@ -144,9 +136,7 @@ function arrayContainsNode(array, node) {
     return result;
 }
 
-
 AStarAlgorithm.prototype.getConnectedNodes = function (parent) {
-
     var nodes = [];
 
     //above
