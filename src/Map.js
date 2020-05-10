@@ -71,7 +71,7 @@ function Map() {
 }
 
 Map.prototype.getCoordCost = function(x, y) {
-    return Math.abs(this.rawInput[x][y]);
+    return Math.abs(this.rawInput[y][x]);
 }
 
 Map.prototype.getWidth = function() {
@@ -90,9 +90,11 @@ Map.prototype.forEach = function(cb) {
 
 Map.prototype.isValidCoord = function(x, y) {
     if(x < 0) return false;
-    if(x > this.getWidth()) return false;
+    if(x >= this.getWidth()) return false;
     if(y < 0) return false;
-    if(y > this.getHeight()) return false;
+    if(y >= this.getHeight()) return false;
+    var cost = this.getCoordCost(x,y);
+    if(cost == 8) return false;
     return true;
 }
 

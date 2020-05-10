@@ -32,7 +32,7 @@ new p5(( sk ) => {
           ui.coordToCenteredPosition(destinationCoordY), 24)        
     };
 
-    let simulationEveryNthFrame = 20;
+    let simulationEveryNthFrame = 10;
     let frameCounter = 0;
     let algoirthm = new AStarAlgorithm(startCoordX,startCoordY, destinationCoordX, destinationCoordY, probePositon,map);
     //let algoirthm = new PredeterminedAlgorith(probePositon);

@@ -12,6 +12,8 @@ function AStarAlgorithm(startX, startY, goalX, goalY, probePosition, map) {
     this.ClosedList = [];
     this.B = {};
     this.C = {};
+
+    this.stop = false;
 }
 
 //Page 108 AI Programmin wisdom Manhattan Distance
@@ -59,53 +61,6 @@ AStarAlgorithm.prototype.calculateCostsForNode = function (node) {
     node.f = node.g + node.h;
 }
 
-AStarAlgorithm.prototype.work = function () {
-    var B = this.getBestNodeInOpenList();
-    if (B.equals(this.G)) {
-        console.log("goal has been found");
-        return;
-    }
-    if(this.OpenList.length == 0) {
-        console.log("no path can be found");
-        return;
-    }
-
-    var connectedNodes = this.getConnectedNodes(B);
-    connectedNodes = connectedNodes.sort((node1,node2) => node1.f > node2.f);
-
-    var self = this
-    connectedNodes.forEach(function(C){
-        self.calculateCostsForNode(C);
-        self.probePosition(B.x, B.y, C.x, C.y);
-
-        if(arrayContainsNode(self.OpenList, C)) {  
-            B.children.push(C);
-            if(C.g < B.g) {
-
-            }
-        }
-        else if(arrayContainsNode(self.ClosedList, C)){
-            B.children.push(C);
-
-        }
-        else{
-            self.OpenList.push(C);
-        }
-    })
-}
-
-function arrayContainsNode(array, node) {
-    var contains = false;
-    array.forEach(function(arrayNode) {
-        if(node.equals(arrayNode)) {
-            contains = true;
-            return false;
-        }
-    })
-    return contains;
-}
-
-
 AStarAlgorithm.prototype.getBestNodeInOpenList = function () {
     var bestNode = this.OpenList[0];
     this.OpenList.forEach(function(node) {
@@ -116,6 +71,79 @@ AStarAlgorithm.prototype.getBestNodeInOpenList = function () {
     var copy = bestNode.clone();
     return copy;
 }
+
+AStarAlgorithm.prototype.work = function () {
+    if(this.stop) return;
+    
+    if(this.OpenList.length == 0) {
+        console.log("no path can be found");
+        return;
+    }
+
+    this.OpenList  = this.OpenList.sort((node1,node2) => node1.f > node2.f);
+    var B = this.OpenList.shift();
+    if (B.equals(this.G)) {
+        this.stop = true;
+        console.log("reached the goal");
+        return;
+    }
+
+    this.ClosedList.push(B);
+
+    var connectedNodes = this.getConnectedNodes(B);
+    connectedNodes = connectedNodes.sort((node1,node2) => node1.f > node2.f);
+
+    var self = this
+    connectedNodes.forEach(function(C){
+        self.calculateCostsForNode(C);
+        self.probePosition(B.x, B.y, C.x, C.y);
+
+        let result = {};
+
+        var openListContains = arrayContainsNode(self.OpenList, C)
+        var closedListContains = arrayContainsNode(self.ClosedList, C)
+
+        if (C.equals(self.G)) {
+            self.stop = true;
+            console.log("reached the goal");
+            return false;
+        }
+        else if(openListContains.contains) {  
+            if(C.f > openListContains.node.f) {
+                console.log("skip successor"); 
+                return;
+            }
+        }
+        else if(closedListContains.contains){
+            B.children.push(C);
+            if(C.f > closedListContains.node.f) {
+                console.log("skip successor"); 
+                return;
+            }
+            else{
+                self.OpenList.push(C);
+            }
+        }
+        else{
+            self.OpenList.push(C);
+        }
+    })
+
+}
+
+function arrayContainsNode(array, node) {
+    var result = {}
+    result.contains = false;
+    array.forEach(function(arrayNode) {
+        if(node.equals(arrayNode)) {
+            result.contains = true;
+            result.node = node
+            return false;
+        }
+    })
+    return result;
+}
+
 
 AStarAlgorithm.prototype.getConnectedNodes = function (parent) {
 

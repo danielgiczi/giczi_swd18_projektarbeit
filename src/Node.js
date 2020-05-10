@@ -2,13 +2,13 @@ function Node(x, y) {
     this.x = x;
     this.y = y;
     
-    let f = 0;
-    let g = 0;
-    let h = 0;
+    this.f = 0;
+    this.g = 0;
+    this.h = 0;
 
-    let parent;
-    let next;
-    let children = [];
+    this.parent;
+    this.next;
+    this.children = [];
 }
 
 Node.prototype.equals = function (other) {
