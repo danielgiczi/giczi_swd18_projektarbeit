@@ -62,7 +62,7 @@ var mapTest = `
 `;
 
 function Map() {
-    let chosenMap = mapTest;
+    let chosenMap = map3;
     let rows = chosenMap.split("\n");
 
     let mapArr = []

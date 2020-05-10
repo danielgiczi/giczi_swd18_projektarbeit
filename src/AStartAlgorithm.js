@@ -48,12 +48,12 @@ AStarAlgorithm.prototype.getBestNodeInOpenList = function () {
 }
 
 AStarAlgorithm.prototype.work = function () {
-    if(this.stop) return;
+    if(this.stop) return true;
     
     if(this.OpenList.length == 0) {
         console.log("no path can be found");
         this.stop = true;
-        return;
+        return true;
     }
 
     this.OpenList  = this.OpenList.sort((node1,node2) => node1.f > node2.f);
@@ -107,7 +107,7 @@ AStarAlgorithm.prototype.work = function () {
 
 AStarAlgorithm.prototype.goalReached = function(goal) {
     this.stop = true;
-    console.log("reached the goal", goal);
+    console.log("reached the goal");
 
     var node = goal;
     var nextNode = node.parent;
