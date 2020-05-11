@@ -7,10 +7,11 @@ import Map from "./Map"
 import UI from "./UI"
 import maps from "./Maps";
 
-let simulationMode = false;
+let simulationMode = true;
 let simulationStarted = false;
 
 $("#toggle-mode").click(function () {
+  simulationStarted = false;
   simulationMode = !simulationMode;
   showHideControls()
   init(mapData, Number($("#algorithms select").val()));
@@ -55,6 +56,7 @@ $("#maps select").change(function(){
 
 let mapData;
 function changeMap() {
+  simulationStarted = false;
   mapData = maps[$("#maps select").val()];
   init(mapData, Number($("#algorithms select").val()));
 }
@@ -64,6 +66,7 @@ $("#algorithms select").change(function(){
 })
 
 function changeAlgorithm() {
+  simulationStarted = false;
   init(mapData, Number($("#algorithms select").val()));
 }
 
