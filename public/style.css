@@ -19,13 +19,6 @@ body {
     
 }
 
-#credits {
-  position: fixed;
-  right:10px;
-  top:10px;
-  color:#666;
-}
-
 #app{
   display: flex;
   min-height: 100vh;
@@ -89,18 +82,67 @@ body {
   left:0;
 }
 
+#top-coords:before,
+#bottom-coords:before,
+#left-coords:before,
+#right-coords:before {
+  position: absolute;
+  font-weight: bold;
+  background: #aaa;
+  color:#fff;
+  font-size: 1rem;
+  width: 22px;
+  height: 22px;
+  line-height: 24px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#top-coords:before {
+  content: 'X';
+  left: 50%;
+  top: 0;
+  margin: -2.5rem 0 0 0;
+  transform: translateX(-50%);
+}
+
+#bottom-coords:before {
+  content: 'X';
+  left: 50%;
+  bottom: 0;
+  margin: 0 0 -2.5rem 0;
+  transform: translateX(-50%);
+}
+
+#left-coords:before {
+  content: 'Y';
+  top: 50%;
+  left: 0;
+  margin: 0 0 0 -2.5rem;
+  transform: translateY(-50%);
+}
+
+#right-coords:before {
+  content: 'Y';
+  top: 50%;
+  left: auto;
+  right:0;
+  margin: 0 -2.5rem 0 0;
+  transform: translateY(-50%);
+}
+
 #toggle-mode {
   position: fixed;
   top: 0;
   left: 0;
   box-shadow: 0px 0px 6px #666;
   background: #c4c4c4;
-  padding: 1rem;
-  height: 4rem;
-  width: 6rem;
+  padding: 1.2rem;
+  height: 4.5rem;
+  width: 8rem;
   text-align: center;
   transition: background 400ms ease;
-  cursor: pointer;;
+  cursor: pointer;
 }
 
 .meta-show-simulation-controls #toggle-mode .simulation {
@@ -119,8 +161,9 @@ body {
   display: none;
   position: absolute;
   left: 0;
-  color: #333;
+  color: #000;
   right: 0;
+  font-size:1rem;
   top:50%;
   transform: translateY(-50%);
 }
@@ -142,19 +185,104 @@ body {
   display: block;
 }
 
+#controls .game-controls.finish .reset-game {
+  display: block;
+}
+
+#controls .game-controls .reset-game {
+  position: absolute;
+  right:2rem;
+  top:50%;
+  transform:translateY(-50%);
+  padding:1rem 2rem;
+  font-size: 1.4rem;
+  display: none;
+}
+
+.game-controls .info {
+  color: #333;
+  font-size: .9rem;
+  padding:0.2rem;
+  display: inline-block;
+}
+
+.game-controls .results {
+  margin-left: 2rem;
+  display: inline-block;
+}
+
+.game-controls .result {  
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.game-controls .result:not(:last-child) {  
+  padding-right:.5rem;
+  border-right:1px solid #666;
+}
+
+.game-controls .results:before {
+  content:'Results';
+  position: absolute;
+  color: #333;
+  text-transform: uppercase;
+  font-size: .9rem;
+  top:0.6rem;
+}
+
+.game-controls .results:empty:after {
+  content:'No previous commands';
+  color: #333;
+  text-transform: uppercase;
+  font-size: .9rem;
+  top:0.6rem;
+}
+
+#credits {
+  position: fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  color:#eee;
+  height: 24px;
+  line-height: 24px;
+  text-transform: uppercase;
+  vertical-align: middle;
+  background: #333;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
 #controls {
   display: block;
   background: #fff;
   box-shadow: 0px 0px 6px #333;
   position: fixed;
-  bottom:0;
+  bottom:24px;
   left:0;
   right:0;
   padding:1rem;
 }
 
+#controls .controls-wrapper > div:before{
+  position: absolute;
+  left: 1.2rem;
+  top: .6rem;
+  color: #333;
+  text-transform: uppercase;
+  font-size: .9rem;
+}
+
+#controls .simulation-controls:before {
+  content:'Simulation mode';
+}
+
+#controls .game-controls:before {
+  content:'Game mode';
+}
+
 .controls-wrapper{
-  padding:1rem;
+  padding:1.5rem 0 .5rem 0;
 }
 
 .button, .button:link,.button:visited {
@@ -163,4 +291,55 @@ body {
   color:#eee;
   text-decoration: none;
   text-transform: uppercase;
+  transition: background-color 400ms ease, color 400ms ease;
+  display: inline-block;
+}
+
+.button:hover{
+  background: #373737;
+}
+
+.selectbox-wrapper{
+  position: fixed;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.selectbox {
+  position: relative;
+  background: #aaa;
+  box-shadow: 0px 0px 6px #666;
+  display: inline-block;
+  margin:0 3rem 0 0;
+}
+
+.selectbox:last-of-type{
+  margin-right: 0;
+}
+
+.selectbox select{
+  padding:1.8rem 1rem 1.3rem 1rem;
+  font-size: 1rem;
+  background: #aaa;
+  border:1px solid #aea8a8;
+  display: block;
+  min-width: 180px;
+}
+
+.selectbox:before{
+  position: absolute;
+  left:1.2rem;
+  top:.6rem;
+  color:#fff;
+  text-transform: uppercase;
+  font-size: .75rem;
+}
+
+#maps:before{
+  content:'Choose a map';
+}
+
+#algorithms:before{
+  content:'Select algorithm';
 }

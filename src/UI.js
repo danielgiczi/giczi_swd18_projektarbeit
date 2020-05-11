@@ -1,5 +1,5 @@
-function UI(sk, imgWidth, imgHeight) {
-    document.documentElement.style.setProperty('--tile-size', imgWidth + "px");
+function UI(sk, imgSize) {
+    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
 
     this.sk = sk;
     this.imgM0;
@@ -10,8 +10,9 @@ function UI(sk, imgWidth, imgHeight) {
     this.imgM5;
     this.imgWall;
 
-    this.imgWidth = imgWidth;
-    this.imgHeight = imgHeight;
+    this.imgSize = imgSize;
+
+    this.map;
 }
 
 UI.prototype.preload = function () {
@@ -26,13 +27,20 @@ UI.prototype.preload = function () {
 }
 
 UI.prototype.setup = function (map) {
-    let canvasWidth = map.getWidth()* this.imgWidth;
-    let canvasHeight = map.getHeight()* this.imgHeight;
+    this.map=map;
+    let canvasWidth = map.getWidth()* this.imgSize;
+    this.width = canvasWidth
+    let canvasHeight = map.getHeight()* this.imgSize;
+    this.height = canvasHeight
 
     var topCoords = document.getElementById("top-coords")
+    topCoords.innerHTML = "";
     var rightCoords = document.getElementById("right-coords")
+    rightCoords.innerHTML = ""
     var bottomCoords = document.getElementById("bottom-coords")
+    bottomCoords.innerHTML = "";
     var leftCoords = document.getElementById("left-coords")
+    leftCoords.innerHTML = "";
 
     for(let x = 0; x <  map.getHeight(); x++) {
       var thisCoord = document.createElement("div")
@@ -49,6 +57,8 @@ UI.prototype.setup = function (map) {
     }
 
     var canvas = this.sk.createCanvas(canvasWidth, canvasHeight);
+    let pg = this.sk.createGraphics(canvasWidth, canvasHeight);
+
     canvas.parent('wrapper');
 
     this.sk.background("#eee");
@@ -69,15 +79,36 @@ UI.prototype.setup = function (map) {
                 case 8: imgToDraw = this.imgWall; break;
             }
 
-            this.sk.image(imgToDraw, currX, currY, this.imgWidth, this.imgHeight)
-            currX += this.imgWidth;
+            pg.image(imgToDraw, currX, currY, this.imgSize, this.imgSize)
+            currX += this.imgSize;
         })
-        currY += this.imgHeight;
+        currY += this.imgSize;
     })
+
+    return { pg, canvas };
+}
+
+UI.prototype.coordToPosition = function(coord) {
+    return (coord * this.imgSize);
 }
  
 UI.prototype.coordToCenteredPosition = function(coord) {
-    return (coord * this.imgWidth) + this.imgWidth/2
+    return this.coordToPosition(coord) + this.imgSize/2
+}
+
+UI.prototype.mouseCoordToCenteredPosition = function(coord) {
+    if(coord < 0) return -1;
+    let found = -1;
+    for(let t=0;t <= this.imgSize * this.map.getWidth(); t += this.imgSize) {
+        
+        if((coord / t) < 1) {
+            break;
+        }
+
+        found++;
+    }
+    //console.log("x",coord, found);
+    return found;
 }
 
 export default UI

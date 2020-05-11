@@ -20,15 +20,29 @@
             <div class="controls-wrapper">
                 <div class="simulation-controls">
                     <a href="javascript:void(0)" class="button start-simulation">Start</a>
+                    <a href="javascript:void(0)" class="button reset-simulation">Reset</a>
                 </div>
                 <div class="game-controls">
-
+                    <span class="info">Select destination by clicking on the field</span>
+                    <div class='results'></div>
+                    <a href="javascript:void(0)" class="button reset-game">Reset</a>
                 </div>
             </div>
         </div>
         <div id="toggle-mode">
             <span class="simulation">Simulation</span>
             <span class="game">Benchmark</span>
+        </div>
+        <div class="selectbox-wrapper">
+            <div id="maps" class="selectbox">
+                <select class="maps-select selectbox-select"></select>
+            </div>
+            <div id="algorithms" class="selectbox">
+                <select class="algorithms-select selectbox-select">
+                    <option value="0">A*</option>
+                    <option value="1">Predetermined</option>
+                </select>
+            </div>            
         </div>
     </div>
 </body>

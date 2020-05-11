@@ -1,68 +1,4 @@
-//Map Werte:
-// 0,-1,-2,-3,-4,-5 für Gewichte
-// 8 für unendlich (Wand)
-// S für Start
-// D für Destination
-
-var map1 = `
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 S 0 0 0 0 0 D 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-`;
-
-var map2 = `
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 S 0 0 8 0 0 D 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-`;
-
-var map3 = `
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 S 0 0 8 0 0 D 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 8 8 8 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-    0 0 0 0 0 0 0 0 0 0 0
-`;
-
-var map4 = `
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 S 0 0 8 0 0 D 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-    0 0 0 0 0 8 0 0 0 0 0
-`;
-
-var mapTest = `
-    S 0 0 8 D
-    0 0 0 0 0
-`;
-
-function Map() {
-    let chosenMap = map3;
+function Map(chosenMap) {
     let rows = chosenMap.split("\n");
 
     let mapArr = []
@@ -72,8 +8,8 @@ function Map() {
     let rowInx = 0;
     rows.forEach(function(val) {
         if(!val || val=="") return;
-        let row = val.replace(/\s\s+/g, " ");
-        
+        let row = val.replace(/\s\s+/g, " ");        
+        if(!row || row=="") return;
         let chars = row.split(" ")
 
         let rowArr = [];
@@ -97,6 +33,7 @@ function Map() {
             rowArr.push(weight);
             colInx++;
         })
+        if(rowArr.length == 0) return;
         mapArr.push(rowArr)
         rowInx++;
     })

@@ -85,14 +85,14 @@ AStarAlgorithm.prototype.work = function () {
             break;
         }
         else if(openListContains.contains) {  
-            if(C.f > openListContains.node.f) {
-                console.log("skip");
+            if(C.f >= openListContains.node.f) {
+                //console.log("skip");
                 continue;
             }
         }
         else if(closedListContains.contains){
-            if(C.f > closedListContains.node.f + 1) {
-                console.log("skip");
+            if(C.f >= closedListContains.node.f) {
+                //console.log("skip");
                 continue;
             }
             else{
@@ -107,7 +107,7 @@ AStarAlgorithm.prototype.work = function () {
 
 AStarAlgorithm.prototype.goalReached = function(goal) {
     this.stop = true;
-    console.log("reached the goal");
+    //console.log("reached the goal");
 
     var node = goal;
     var nextNode = node.parent;
