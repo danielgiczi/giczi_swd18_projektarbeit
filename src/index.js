@@ -18,10 +18,6 @@ $("#toggle-mode").click(function () {
   init(mapData, Number($("#algorithms select").val()));
 })
 
-$("#controls .start-simulation").click(function () {
-  simulationStarted = true;
-})
-
 $("#controls .reset-simulation").click(function () {
   simulationStarted = false;
   init(mapData, Number($("#algorithms select").val()));
@@ -134,7 +130,7 @@ function init(mapData, algorithmIndex) {
           algorithm = new DjikstraAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
           break;
           case 2:
-          algorithm = new BreadthFirstSearchAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
+          algorithm = new BreadthFirstSearchAlgorithm(map.startX, map.startY, algDestX, algDestY, map);
           break;
       }
     }
@@ -149,7 +145,21 @@ function init(mapData, algorithmIndex) {
       if (!simulationMode) {
         canvas.mouseClicked(mouseClicked)
       }
+
+      let self = this
+      $("#controls .start-simulation").click(function () {
+       runAlgorithm();
+      })
     };
+
+    function runAlgorithm() {
+      var result = algorithm.run();
+      probes = result.probes;
+      paths = result.paths;
+      probeIndex = 0;
+
+      handleGameFinished(result.found);
+    }
 
     let started = false;
 
@@ -159,42 +169,13 @@ function init(mapData, algorithmIndex) {
     let startTime;
     let finishTime;
 
-    function doAlgorithm() {
-      if (!simulationMode) {
-        if (!started && benchmarkStarted) {
-          started = true;
-          let loopCount = 0;
-          do {
-            var result = algorithm.work();
-            if (result.finished) {
-              handleGameFinished(result);
-              break;
-            }
-            loopCount++;
-            if (loopCount > 500) {
-              console.error("something went wrong");
-              break;
-            }
-          } while (true);
-        }
-        mouseOver();
-      }
-      else {
-        if (simulationStarted) {
-          let res = algorithm.work();
-          if (res) {
-            gameFinished = res.finished;
-            destFound = res.found;
-          }
-        }
-      }
-    }
-
     sk.draw = () => {
-      doAlgorithm();
-
       sk.clear();
       sk.image(pg, 0, 0, ui.width, ui.height);
+
+      if (!simulationMode) {
+        mouseOver();
+      }
 
       drawProbes();
       drawCalculated();
@@ -212,11 +193,11 @@ function init(mapData, algorithmIndex) {
       }
     };
 
-    function handleGameFinished(result) {
+    function handleGameFinished(found) {
       finishTime = performance.now();
       $("#controls .game-controls").addClass("finish");
       gameFinished = true;
-      destFound = result.found;
+      destFound = found;
 
       let html = `<span class='coords'>(${destX},${destY})</span>`
       html += `<div class='result'>        
@@ -238,14 +219,14 @@ function init(mapData, algorithmIndex) {
     let gameY;
 
     function moveStart() {
-      if (calculated.length == 0) {
+      if (paths.length == 0) {
         return;
       }
 
-      let nextPosition = calculated[calculated.length - 1 - moveInx];
+      let nextPosition = paths[paths.length - 1 - moveInx];
 
       if (!nextPosition) {
-        nextPosition = calculated[0];
+        nextPosition = paths[0];
       }
 
       let moveToX = ui.coordToCenteredPosition(nextPosition.currentX);
@@ -319,6 +300,7 @@ function init(mapData, algorithmIndex) {
       initAlgorithm();
       benchmarkStarted = true;
       startTime = performance.now();
+      runAlgorithm();
     }
 
     function renderHighlight() {
@@ -339,20 +321,17 @@ function init(mapData, algorithmIndex) {
     }
 
     let probes = []
-    function probePositon(currentX, currentY, probeX, probeY) {
-      probes.push({
-        currentX,
-        currentY,
-        probeX,
-        probeY
-      })
-    }
+    let paths = []
 
+    let probeIndex = 0;
     function drawProbes() {
       sk.stroke("#eee");
       sk.strokeWeight(2);
-      probes.forEach(function (probe) {
-        if (gameFinished && !destFound) {
+
+      for(let index = 0; index < probes.length; index++){
+        if(index == probeIndex) break;
+        let probe = probes[index];
+        if (!destFound && probeIndex >= probes.length) {
           sk.fill("red")
         }
         else {
@@ -360,38 +339,38 @@ function init(mapData, algorithmIndex) {
         }
 
         sk.rect(
-          ui.coordToPosition(probe.probeX),
-          ui.coordToPosition(probe.probeY), imgSize)
+          ui.coordToPosition(probe.x),
+          ui.coordToPosition(probe.y), imgSize)
+      }
 
-      })
       sk.stroke("#000");
       sk.strokeWeight(1)
-    }
 
-    let calculated = []
 
-    function setCalculated(currentX, currentY, probeX, probeY) {
-      calculated.push({
-        currentX,
-        currentY,
-        probeX,
-        probeY
-      })
+      probeIndex += Math.round(probes.length / 100);
+      if(probeIndex > probes.length) {
+        probeIndex = probes.length ;
+      }
     }
 
     function drawCalculated() {
-      if (calculated.length == 0) return;
+      if (paths.length == 0 || probeIndex < probes.length) return;
       sk.stroke("#fff");
       sk.strokeWeight(8);
 
-      calculated.forEach(function (calculated) {
+      for(let index = 0; index < paths.length; index++){
+        let path = paths[index];
+        let prevPath = paths[index -1];
+        if(!prevPath) {
+          prevPath = { x: path.x, y: path.y}
+        }
         sk.line(
-          ui.coordToCenteredPosition(calculated.currentX),
-          ui.coordToCenteredPosition(calculated.currentY),
-          ui.coordToCenteredPosition(calculated.probeX),
-          ui.coordToCenteredPosition(calculated.probeY)
+          ui.coordToCenteredPosition(prevPath.x),
+          ui.coordToCenteredPosition(prevPath.y),
+          ui.coordToCenteredPosition(path.x),
+          ui.coordToCenteredPosition(path.y)
         )
-      });
+      }
       sk.stroke("#000");
       sk.strokeWeight(1)
     }

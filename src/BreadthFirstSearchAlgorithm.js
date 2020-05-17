@@ -1,11 +1,9 @@
 import Node from "./BreadthFirstSearchNode"
 
-function BreadthFirstSearchAlgorithm(startX, startY, goalX, goalY, probePosition, drawCalculated, map) {
+function BreadthFirstSearchAlgorithm(startX, startY, goalX, goalY, map) {
     this.P = new Node(startX, startY);
     this.G = new Node(goalX, goalY);
 
-    this.probePosition = probePosition;
-    this.drawCalculated = drawCalculated;
     this.map = map;
 
     this.visited = [];
@@ -14,36 +12,51 @@ function BreadthFirstSearchAlgorithm(startX, startY, goalX, goalY, probePosition
     this.queue.push(this.P);
 
     this.stop = null;
+    
+    this.probes = [];
+    this.paths =[];
 }
 
-BreadthFirstSearchAlgorithm.prototype.work = function () {
-    if(this.stop) return this.stop;
+BreadthFirstSearchAlgorithm.prototype.run = function () {
 
-    if(this.queue.length == 0) {
-        console.log("no path found");
-        this.stop = { finished: true, found: false};
-        return this.stop;
+    while(true) {
+        if(this.queue.length == 0) {
+            console.log("no path found");
+            break;
+        }
+
+        var B = this.queue.shift();
+
+        if(B.equals(this.G)) {
+            var node = B;
+            var nextNode = node.parent;
+            while(!!node.parent) {
+                this.paths.push({x: node.x, y:node.y})
+                node = nextNode;
+                nextNode = node.parent;
+            }
+            this.paths.push({x: node.x, y:node.y})
+
+            break;
+        }
+
+        var adjacentNodes = this.getUnivisitedAdjacentNodes(B);
+        this.visited.push(B);
+
+        for(var adjacentNodeIndex = 0; adjacentNodeIndex < adjacentNodes.length; adjacentNodeIndex++)
+        {
+            var C = adjacentNodes[adjacentNodeIndex];
+            this.visited.push(C);
+            this.queue.push(C);
+            this.probes.push({x: C.x, y:C.y})
+        }
     }
 
-    var B = this.queue.shift();
-
-    if(B.equals(this.G)) {
-        this.goalReached(B);
-        return this.stop;
+    return {
+        found: this.paths.length > 0,
+        paths: this.paths,
+        probes: this.probes
     }
-
-    var adjacentNodes = this.getUnivisitedAdjacentNodes(B);
-    this.visited.push(B);
-
-    for(var adjacentNodeIndex = 0; adjacentNodeIndex < adjacentNodes.length; adjacentNodeIndex++)
-    {
-        var C = adjacentNodes[adjacentNodeIndex];
-        this.visited.push(C);
-        this.queue.push(C);
-        this.probePosition(B.x, B.y, C.x, C.y);
-    }
-
-    return { found:false, finished: false}
 }
 
 BreadthFirstSearchAlgorithm.prototype.isNodeUnivisited = function(node) {
@@ -87,17 +100,6 @@ BreadthFirstSearchAlgorithm.prototype.getUnivisitedAdjacentNodes = function (par
     }
 
     return nodes;
-}
-
-BreadthFirstSearchAlgorithm.prototype.goalReached = function(goal) {
-    this.stop = { finished: true, found: true};
-    var node = goal;
-    var nextNode = node.parent;
-    while(!!node.parent) {
-        this.drawCalculated(node.x, node.y, nextNode.x, nextNode.y);
-        node = nextNode;
-        nextNode = node.parent;
-    }
 }
 
 export default BreadthFirstSearchAlgorithm;
