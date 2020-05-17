@@ -1,4 +1,4 @@
-import Node from "./Node"
+import Node from "./AStarNode"
 
 function AStarAlgorithm(startX, startY, goalX, goalY, probePosition, drawCalculated, map) {
     this.P = new Node(startX, startY);

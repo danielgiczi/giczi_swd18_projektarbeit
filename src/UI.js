@@ -1,5 +1,5 @@
 function UI(sk, imgSize) {
-    document.documentElement.style.setProperty('--tile-size', (imgSize < 32 ? imgSize-1 : imgSize) + "px");
+    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
 
     this.sk = sk;
     this.imgTile;

@@ -39,6 +39,7 @@ body {
   color:#666;
   margin:0 0.5rem 0 0;
   display:inline-block;
+  white-space: nowrap;
 }
 
 .coords div {

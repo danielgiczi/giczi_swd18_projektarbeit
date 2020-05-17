@@ -1,11 +1,11 @@
 import '../public/reset.css';
 import '../public/style.css';
 
-import PredeterminedAlgorith from "./PredeterminedAlgorithm"
-import AStarAlgorithm from "./AStartAlgorithm"
+import AStarAlgorithm from "./AStarAlgorithm"
 import Map from "./Map"
 import UI from "./UI"
 import maps from "./Maps";
+import DjikstraAlgorithm from './DjikstraAlgorithm';
 
 let simulationMode = true;
 let simulationStarted = false;
@@ -29,6 +29,13 @@ $("#controls .reset-simulation").click(function () {
 $("#controls .reset-game").click(function () {
   init(mapData, Number($("#algorithms select").val()));
 })
+
+$(document).keydown(function(e){
+  if(e.which == 82) {
+    //R-Key was pressed
+    init(mapData, Number($("#algorithms select").val()));
+  }
+});
 
 function showHideControls() {
   $("body").removeClass("meta-show-simulation-controls");
@@ -107,24 +114,23 @@ function init(mapData, algorithmIndex) {
     let benchmarkStarted = false;
 
     function initAlgorithm() {
+      let algDestX;
+      let algDestY;
+
+      if (simulationMode) {
+        algDestX = map.destX;
+        algDestY = map.destY;
+      }
+      else {
+        algDestX = destX;
+        algDestY = destY;
+      }
       switch (Number(algorithmIndex)) {
-        case 0:
-          let algDestX;
-          let algDestY;
-
-          if (simulationMode) {
-            algDestX = map.destX;
-            algDestY = map.destY;
-          }
-          else {
-            algDestX = destX;
-            algDestY = destY;
-          }
-
+        case 0:     
           algorithm = new AStarAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
           break;
         case 1:
-          algorithm = new PredeterminedAlgorith(probePositon)
+          algorithm = new DjikstraAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
           break;
       }
     }
@@ -140,8 +146,6 @@ function init(mapData, algorithmIndex) {
         canvas.mouseClicked(mouseClicked)
       }
     };
-
-    let frameCounter = 0;
 
     let started = false;
 
@@ -202,8 +206,6 @@ function init(mapData, algorithmIndex) {
       if (!!gameFinished) {
         moveStart();
       }
-
-      frameCounter++;
     };
 
     function handleGameFinished(result) {
