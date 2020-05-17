@@ -14,12 +14,12 @@ function AStarAlgorithm(startX, startY, goalX, goalY, probePosition, drawCalcula
     this.B = {};
     this.C = {};
 
-    this.stop = false;
+    this.stop;
 }
 
 //Page 108 AI Programmin wisdom Manhattan Distance
 AStarAlgorithm.prototype.getCostFromStartToNode = function (node) {
-    return Math.abs(node.x - this.G.x) + Math.abs(node.y - this.G.y);
+    return Math.abs(this.G.x - node.x) + Math.abs(this.G.y - node.y);
 }
 
 AStarAlgorithm.prototype.getEstimatedCostFromStartToNode = function (node) {
@@ -36,31 +36,20 @@ AStarAlgorithm.prototype.calculateCostsForNode = function (node) {
     node.f = node.g + node.h;
 }
 
-AStarAlgorithm.prototype.getBestNodeInOpenList = function () {
-    var bestNode = this.OpenList[0];
-    this.OpenList.forEach(function(node) {
-        if(node.f < bestNode.f) {
-            bestNode = node;
-        }
-    });
-    var copy = bestNode.clone();
-    return copy;
-}
-
 AStarAlgorithm.prototype.work = function () {
-    if(this.stop) return true;
+    if(this.stop) return this.stop;
     
     if(this.OpenList.length == 0) {
         console.log("no path can be found");
-        this.stop = true;
-        return true;
+        this.stop = { finished: true, found: false};
+        return this.stop;
     }
 
-    this.OpenList  = this.OpenList.sort((node1,node2) => node1.f > node2.f);
+    this.OpenList  = this.OpenList.sort((node1,node2) => parseFloat(node1.f) -  parseFloat(node2.f));
     var B = this.OpenList.shift();
     if (B.equals(this.G)) {
         this.goalReached(B);
-        return;
+        return this.stop;
     }
 
     this.ClosedList.push(B);
@@ -73,12 +62,16 @@ AStarAlgorithm.prototype.work = function () {
     {
         var C = connectedNodes[childIndex];
         self.calculateCostsForNode(C);
-        self.probePosition(B.x, B.y, C.x, C.y);
+        //self.probePosition(B.x, B.y, C.x, C.y);
 
         let result = {};
 
         var openListContains = arrayContainsNode(self.OpenList, C)
         var closedListContains = arrayContainsNode(self.ClosedList, C)
+
+        if(!openListContains.contains && !closedListContains.contains) {
+            self.probePosition(B.x, B.y, C.x, C.y);
+        }
 
         if (C.equals(self.G)) {
             self.goalReached(C);
@@ -103,10 +96,12 @@ AStarAlgorithm.prototype.work = function () {
             self.OpenList.push(C);
         }
     }
+
+    return { finished: false, found: false};
 }
 
 AStarAlgorithm.prototype.goalReached = function(goal) {
-    this.stop = true;
+    this.stop = { finished: true, found: true};;
     //console.log("reached the goal");
 
     var node = goal;

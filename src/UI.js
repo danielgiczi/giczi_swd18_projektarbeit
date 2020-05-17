@@ -1,13 +1,8 @@
 function UI(sk, imgSize) {
-    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
+    document.documentElement.style.setProperty('--tile-size', (imgSize < 32 ? imgSize-1 : imgSize) + "px");
 
     this.sk = sk;
-    this.imgM0;
-    this.imgM1;
-    this.imgM2;
-    this.imgM3;
-    this.imgM4;
-    this.imgM5;
+    this.imgTile;
     this.imgWall;
 
     this.imgSize = imgSize;
@@ -16,13 +11,14 @@ function UI(sk, imgSize) {
 }
 
 UI.prototype.preload = function () {
-    //this.imgM0 = this.sk.loadImage("public/tiles/tilemap_v1_07.png")
-    this.imgM0 = this.sk.loadImage("public/tiles/tilemap_v1_09.png")
-    this.imgM1 = this.sk.loadImage("public/tiles/tilemap_v1_01.png")
-    this.imgM2 = this.sk.loadImage("public/tiles/tilemap_v1_02.png")
-    this.imgM3 = this.sk.loadImage("public/tiles/tilemap_v1_03.png")
-    this.imgM4 = this.sk.loadImage("public/tiles/tilemap_v1_04.png")
-    this.imgM5 = this.sk.loadImage("public/tiles/tilemap_v1_05.png")
+    if(this.imgSize < 32) {
+        this.imgTile = this.sk.loadImage("public/tiles/tilemap_v1_11.png")
+    }
+    else 
+    {
+        this.imgTile = this.sk.loadImage("public/tiles/tilemap_v1_09.png")
+    }
+
     this.imgWall = this.sk.loadImage("public/tiles/tilemap_v1_10.png")
 }
 
@@ -70,12 +66,7 @@ UI.prototype.setup = function (map) {
         row.forEach((val) => {
             let imgToDraw;
             switch (Math.abs(val)) {
-                case 0: imgToDraw = this.imgM0; break;
-                case 1: imgToDraw = this.imgM1; break;
-                case 2: imgToDraw = this.imgM2; break;
-                case 3: imgToDraw = this.imgM3; break;
-                case 4: imgToDraw = this.imgM4; break;
-                case 5: imgToDraw = this.imgM5; break;
+                case 0: imgToDraw = this.imgTile; break;
                 case 8: imgToDraw = this.imgWall; break;
             }
 

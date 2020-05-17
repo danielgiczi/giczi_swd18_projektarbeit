@@ -37,10 +37,17 @@ body {
 .coords {
   font-size: 1rem;
   color:#666;
+  margin:0 0.5rem 0 0;
+  display:inline-block;
 }
 
 .coords div {
   height:var(--tile-size);
+  text-align: center;
+}
+
+.lang {
+  font-weight: bold;
 }
 
 #top-coords {
@@ -66,13 +73,13 @@ body {
 
 #left-coords {
   position: absolute;
-  left:-1.5rem;
+  left:-2rem;
   top:0;
 }
 
 #right-coords{
   position: absolute;
-  right:-1.5rem;
+  right:-2rem;  
   top:0;
 }
 

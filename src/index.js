@@ -86,7 +86,7 @@ function init(mapData, algorithmIndex) {
   let highlightX = -1;
   let highlightY = -1;
 
-  let imgSize = 64;
+  let imgSize = 28;
 
   new p5((sk) => {
     let ui = new UI(sk, imgSize);
@@ -139,12 +139,13 @@ function init(mapData, algorithmIndex) {
       }
     };
 
-    let simulationEveryNthFrame = 10;
+    let drawEveryNthFrame = 10;
     let frameCounter = 0;
 
     let started = false;
 
     let gameFinished = false;
+    let destFound = false;
 
     let startTime;
     let finishTime;
@@ -158,9 +159,9 @@ function init(mapData, algorithmIndex) {
           started = true;
           let loopCount = 0;
           do {
-            var finished = algorithm.work();
-            if (finished) {
-              handleGameFinished();
+            var result = algorithm.work();            
+            if (result.finished) {
+              handleGameFinished(result);
               break;
             }
             loopCount++;
@@ -173,11 +174,8 @@ function init(mapData, algorithmIndex) {
         mouseOver();
       }
       else {
-        if (simulationStarted) {
-          if (frameCounter > simulationEveryNthFrame) {
-            frameCounter = 0;
-            algorithm.work();
-          }
+        if (simulationStarted) {          
+          algorithm.work();          
         }
       }
 
@@ -199,27 +197,27 @@ function init(mapData, algorithmIndex) {
       frameCounter++;
     };
 
-    function handleGameFinished() {
+    function handleGameFinished(result) {
       finishTime = performance.now();
       $("#controls .game-controls").addClass("finish");
       gameFinished = true;
+      destFound = result.found;
 
-      let html = `<div class='result'>
-        <span class='coords'>(${destX},${destY})</span>
-        <span class='time'>${finishTime - startTime} ms</span>
+      let html = `<span class='coords'>(${destX},${destY})</span>`
+      html += `<div class='result'>        
+          <span class='lang'>JS</span>
+          <span class='time'>(${Math.round(finishTime - startTime, 5)} ms</span>
       </div>`
+
+      $("#controls .game-controls .results").html("");
       $("#controls .game-controls .results").append(html)
 
-      if($("#controls .game-controls .result").length > 4) {
-        $("#controls .game-controls .result:nth-of-type(1)").remove();
-        $("#controls .game-controls .result:nth-of-type(1)").remove();
-      }
       gameX = ui.coordToCenteredPosition(map.startX);
       gameY = ui.coordToCenteredPosition(map.startY);
     }
 
     let moveInx = 0;
-    let speed = 5;
+    let speed = 10;
 
     let gameX;
     let gameY;
@@ -334,14 +332,19 @@ function init(mapData, algorithmIndex) {
     }
 
     function drawProbes() {
-      sk.stroke("#00ffff");
-      sk.strokeWeight(8);
+      sk.stroke("#eee");
+      sk.strokeWeight(2);
       probes.forEach(function(probe){
-        sk.line(
-          ui.coordToCenteredPosition(probe.currentX),
-          ui.coordToCenteredPosition(probe.currentY),
-          ui.coordToCenteredPosition(probe.probeX),
-          ui.coordToCenteredPosition(probe.probeY));
+          if(gameFinished && !destFound) {
+            sk.fill("red")
+          }
+          else {
+            sk.fill("#343c3c")
+          }
+          
+          sk.rect(
+            ui.coordToPosition(probe.probeX),
+            ui.coordToPosition(probe.probeY), imgSize)
         
       })
       sk.stroke("#000");
@@ -361,7 +364,7 @@ function init(mapData, algorithmIndex) {
 
     function drawCalculated() {
       if(calculated.length == 0) return;
-      sk.stroke("#31bd48");
+      sk.stroke("#fff");
       sk.strokeWeight(8);
         
       calculated.forEach(function(calculated){
