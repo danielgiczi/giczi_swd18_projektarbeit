@@ -6,6 +6,7 @@ import Map from "./Map"
 import UI from "./UI"
 import maps from "./Maps";
 import DjikstraAlgorithm from './DjikstraAlgorithm';
+import BreadthFirstSearchAlgorithm from './BreadthFirstSearchAlgorithm';
 
 let simulationMode = true;
 let simulationStarted = false;
@@ -131,6 +132,9 @@ function init(mapData, algorithmIndex) {
           break;
         case 1:
           algorithm = new DjikstraAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
+          break;
+          case 2:
+          algorithm = new BreadthFirstSearchAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
           break;
       }
     }
