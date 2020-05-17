@@ -101,9 +101,7 @@ AStarAlgorithm.prototype.work = function () {
 }
 
 AStarAlgorithm.prototype.goalReached = function(goal) {
-    this.stop = { finished: true, found: true};;
-    //console.log("reached the goal");
-
+    this.stop = { finished: true, found: true};
     var node = goal;
     var nextNode = node.parent;
     while(!!node.parent) {

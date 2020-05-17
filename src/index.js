@@ -26,7 +26,7 @@ $("#controls .reset-simulation").click(function () {
   init(mapData, Number($("#algorithms select").val()));
 })
 
-$("#controls .reset-game").click(function () {  
+$("#controls .reset-game").click(function () {
   init(mapData, Number($("#algorithms select").val()));
 })
 
@@ -45,12 +45,11 @@ $(document).ready(function () {
   showHideControls();
 })
 
-maps.forEach(function(map, inx) {
+maps.forEach(function (map, inx) {
   $("#maps select").append(`<option value='${inx}'>${map.title}</option>`)
 })
 
-
-$("#maps select").change(function(){
+$("#maps select").change(function () {
   changeMap();
 })
 
@@ -61,7 +60,7 @@ function changeMap() {
   init(mapData, Number($("#algorithms select").val()));
 }
 
-$("#algorithms select").change(function(){
+$("#algorithms select").change(function () {
   changeAlgorithm();
 })
 
@@ -71,10 +70,13 @@ function changeAlgorithm() {
 }
 
 changeAlgorithm();
+
+//$("#maps select").val(3);
+
 changeMap();
 
 function init(mapData, algorithmIndex) {
-  if(!mapData) return;
+  if (!mapData) return;
 
   let map = new Map(mapData.data);
 
@@ -91,7 +93,7 @@ function init(mapData, algorithmIndex) {
   new p5((sk) => {
     let ui = new UI(sk, imgSize);
 
-    if(simulationMode) {
+    if (simulationMode) {
       destX = map.destX;
       destY = map.destY;
     }
@@ -101,29 +103,29 @@ function init(mapData, algorithmIndex) {
     }
 
     let algorithm;
-    let pg ;
+    let pg;
     let benchmarkStarted = false;
 
     function initAlgorithm() {
-      switch(Number(algorithmIndex)) {
-        case 0: 
+      switch (Number(algorithmIndex)) {
+        case 0:
           let algDestX;
           let algDestY;
 
-          if(simulationMode) {
+          if (simulationMode) {
             algDestX = map.destX;
             algDestY = map.destY;
           }
-          else{
+          else {
             algDestX = destX;
             algDestY = destY;
           }
 
           algorithm = new AStarAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
-        break;
-        case 1: 
+          break;
+        case 1:
           algorithm = new PredeterminedAlgorith(probePositon)
-        break;
+          break;
       }
     }
 
@@ -139,7 +141,6 @@ function init(mapData, algorithmIndex) {
       }
     };
 
-    let drawEveryNthFrame = 10;
     let frameCounter = 0;
 
     let started = false;
@@ -150,39 +151,47 @@ function init(mapData, algorithmIndex) {
     let startTime;
     let finishTime;
 
-    sk.draw = () => {
-      sk.clear();
-      sk.image(pg, 0, 0, ui.width, ui.height);
-
+    function doAlgorithm() {
       if (!simulationMode) {
         if (!started && benchmarkStarted) {
           started = true;
           let loopCount = 0;
           do {
-            var result = algorithm.work();            
+            var result = algorithm.work();
             if (result.finished) {
               handleGameFinished(result);
               break;
             }
             loopCount++;
-            if(loopCount > 500) {
+            if (loopCount > 500) {
               console.error("something went wrong");
               break;
-            } 
+            }
           } while (true);
         }
         mouseOver();
       }
       else {
-        if (simulationStarted) {          
-          algorithm.work();          
+        if (simulationStarted) {
+          let res = algorithm.work();
+          if (res) {
+            gameFinished = res.finished;
+            destFound = res.found;
+          }
         }
       }
+    }
+
+    sk.draw = () => {
+      doAlgorithm();
+
+      sk.clear();
+      sk.image(pg, 0, 0, ui.width, ui.height);
 
       drawProbes();
       drawCalculated();
 
-      if(!simulationMode && destX == -1 && destY == -1) {
+      if (!simulationMode && destX == -1 && destY == -1) {
         renderHighlight();
       }
 
@@ -190,7 +199,7 @@ function init(mapData, algorithmIndex) {
 
       renderStart();
 
-      if(!!gameFinished) {
+      if (!!gameFinished) {
         moveStart();
       }
 
@@ -206,7 +215,7 @@ function init(mapData, algorithmIndex) {
       let html = `<span class='coords'>(${destX},${destY})</span>`
       html += `<div class='result'>        
           <span class='lang'>JS</span>
-          <span class='time'>(${Math.round(finishTime - startTime, 5)} ms</span>
+          <span class='time'>${Math.round(finishTime - startTime, 5)} ms</span>
       </div>`
 
       $("#controls .game-controls .results").html("");
@@ -223,9 +232,13 @@ function init(mapData, algorithmIndex) {
     let gameY;
 
     function moveStart() {
+      if (calculated.length == 0) {
+        return;
+      }
+
       let nextPosition = calculated[calculated.length - 1 - moveInx];
 
-      if(!nextPosition) {
+      if (!nextPosition) {
         nextPosition = calculated[0];
       }
 
@@ -235,30 +248,28 @@ function init(mapData, algorithmIndex) {
       let moveSpeed = speed;
 
       let xDiff = moveToX - gameX
-      if(Math.abs(xDiff) < speed && xDiff != 0)
-      {
+      if (Math.abs(xDiff) < speed && xDiff != 0) {
         moveSpeed = Math.abs(xDiff)
       }
 
       let yDiff = moveToY - gameY
-      if(Math.abs(yDiff) < speed && yDiff != 0)
-      {
-        moveSpeed = Math.abs(yDiff)  
+      if (Math.abs(yDiff) < speed && yDiff != 0) {
+        moveSpeed = Math.abs(yDiff)
       }
 
-      if(moveToX > gameX) {
+      if (moveToX > gameX) {
         gameX += moveSpeed;
         //console.log("right");
       }
-      else if(moveToX < gameX) {
+      else if (moveToX < gameX) {
         gameX -= moveSpeed;
         //console.log("left");
       }
-      else if(moveToY > gameY) {
+      else if (moveToY > gameY) {
         gameY += moveSpeed;
         //console.log("down");
       }
-      else if(moveToY < gameY) {
+      else if (moveToY < gameY) {
         gameY -= moveSpeed;
         //console.log("up");
       }
@@ -267,11 +278,11 @@ function init(mapData, algorithmIndex) {
       }
     }
 
-    function renderStart() { 
+    function renderStart() {
       let renderX;
       let renderY;
 
-      if(gameFinished) {
+      if (gameFinished && gameX && gameY) {
         renderX = gameX;
         renderY = gameY;
       }
@@ -281,7 +292,7 @@ function init(mapData, algorithmIndex) {
       }
 
       sk.fill("red");
-      sk.circle(renderX,renderY, 24)
+      sk.circle(renderX, renderY, 24)
     }
 
     function mouseOver() {
@@ -290,13 +301,13 @@ function init(mapData, algorithmIndex) {
     }
 
     function mouseClicked() {
-      if(gameFinished) return;
-      if(highlightX < 0 || highlightY < 0) return;   
-      if(map.getCoordCost(highlightX, highlightY) == 8) {
+      if (gameFinished) return;
+      if (highlightX < 0 || highlightY < 0) return;
+      if (map.getCoordCost(highlightX, highlightY) == 8) {
         console.log("wall clicked");
         return;
       }
-      
+
       destX = highlightX;
       destY = highlightY;
       initAlgorithm();
@@ -305,16 +316,16 @@ function init(mapData, algorithmIndex) {
     }
 
     function renderHighlight() {
-      if(highlightX == -1 || highlightY == -1) return;
+      if (highlightX == -1 || highlightY == -1) return;
 
-      sk.fill(0,128,0,50)
+      sk.fill(0, 128, 0, 50)
       sk.rect(
         ui.coordToPosition(highlightX),
         ui.coordToPosition(highlightY), imgSize)
     }
 
     function renderDestination() {
-      if(destX == -1 || destY == -1) return;
+      if (destX == -1 || destY == -1) return;
       sk.fill("green")
       sk.circle(
         ui.coordToCenteredPosition(destX),
@@ -334,26 +345,26 @@ function init(mapData, algorithmIndex) {
     function drawProbes() {
       sk.stroke("#eee");
       sk.strokeWeight(2);
-      probes.forEach(function(probe){
-          if(gameFinished && !destFound) {
-            sk.fill("red")
-          }
-          else {
-            sk.fill("#343c3c")
-          }
-          
-          sk.rect(
-            ui.coordToPosition(probe.probeX),
-            ui.coordToPosition(probe.probeY), imgSize)
-        
+      probes.forEach(function (probe) {
+        if (gameFinished && !destFound) {
+          sk.fill("red")
+        }
+        else {
+          sk.fill("#343c3c")
+        }
+
+        sk.rect(
+          ui.coordToPosition(probe.probeX),
+          ui.coordToPosition(probe.probeY), imgSize)
+
       })
       sk.stroke("#000");
-      sk.strokeWeight(1)      
+      sk.strokeWeight(1)
     }
 
     let calculated = []
 
-    function setCalculated(currentX, currentY, probeX, probeY) {      
+    function setCalculated(currentX, currentY, probeX, probeY) {
       calculated.push({
         currentX,
         currentY,
@@ -363,11 +374,11 @@ function init(mapData, algorithmIndex) {
     }
 
     function drawCalculated() {
-      if(calculated.length == 0) return;
+      if (calculated.length == 0) return;
       sk.stroke("#fff");
       sk.strokeWeight(8);
-        
-      calculated.forEach(function(calculated){
+
+      calculated.forEach(function (calculated) {
         sk.line(
           ui.coordToCenteredPosition(calculated.currentX),
           ui.coordToCenteredPosition(calculated.currentY),
