@@ -11,8 +11,6 @@ function BreadthFirstSearchAlgorithm(startX, startY, goalX, goalY, map) {
 
     this.queue.push(this.P);
 
-    this.stop = null;
-    
     this.probes = [];
     this.paths =[];
 }

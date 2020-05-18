@@ -124,10 +124,10 @@ function init(mapData, algorithmIndex) {
       }
       switch (Number(algorithmIndex)) {
         case 0:     
-          algorithm = new AStarAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
+          algorithm = new AStarAlgorithm(map.startX, map.startY, algDestX, algDestY, map);
           break;
         case 1:
-          algorithm = new DjikstraAlgorithm(map.startX, map.startY, algDestX, algDestY, probePositon, setCalculated, map);
+          algorithm = new DjikstraAlgorithm(map.startX, map.startY, algDestX, algDestY, map);
           break;
           case 2:
           algorithm = new BreadthFirstSearchAlgorithm(map.startX, map.startY, algDestX, algDestY, map);
