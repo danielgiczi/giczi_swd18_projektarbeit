@@ -24,7 +24,6 @@ module.exports = {
     new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
     new HtmlWebpackPlugin({
       title: 'Custom template',
-      // Load a custom template (lodash by default)
       template: './public/index.html'
     }),
     new webpack.HotModuleReplacementPlugin(),
