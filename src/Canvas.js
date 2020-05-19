@@ -5,6 +5,7 @@ function Canvas(sk, imgSize, setDest) {
     this.imgTile;
     this.imgWall;
     this.imgSize = imgSize;
+    this.imgWeight;
     this.map;
     this.pg;
     this.width;
@@ -24,6 +25,7 @@ Canvas.prototype.preload = function () {
     }
 
     this.imgWall = this.sk.loadImage("public/tiles/tilemap_v1_10.png")
+    this.imgM5 = this.sk.loadImage("public/tiles/tilemap_v1_05.png")
 }
 
 Canvas.prototype.setup = function (map, simulationMode) {
@@ -72,6 +74,7 @@ Canvas.prototype.setup = function (map, simulationMode) {
             let imgToDraw;
             switch (Math.abs(val)) {
                 case 0: imgToDraw = self.imgTile; break;
+                case 5: imgToDraw = self.imgM5; break;
                 case 8: imgToDraw = self.imgWall; break;
             }
 
@@ -156,7 +159,7 @@ Canvas.prototype.drawProbes = function (probes, paths) {
             this.sk.fill("red")
         }
         else {
-            this.sk.fill("#343c3c")
+            this.sk.fill("26","30","30", 100);
         }
 
         this.sk.rect(

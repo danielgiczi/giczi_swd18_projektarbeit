@@ -46,25 +46,10 @@ AStarAlgorithm.prototype.run = function () {
 
         this.OpenList = this.OpenList.sort((node1, node2) => parseFloat(node1.f) - parseFloat(node2.f));
         var B = this.OpenList.shift();
-        if (B.equals(this.G)) {
-            var node = B;
-            var nextNode = node.parent;
-            while (!!node.parent) {
-                this.paths.push({ x: node.x, y: node.y })
-                node = nextNode;
-                nextNode = node.parent;
-            }
-            this.paths.push({ x: node.x, y: node.y })
-
-            break loopOuter;;
-        }
-
         this.ClosedList.push(B);
 
         var connectedNodes = this.getConnectedNodes(B);
-        connectedNodes = connectedNodes.sort((node1, node2) => node1.f > node2.f);
-
-        this.probes.push({ x: B.x, y: B.y })
+        connectedNodes = connectedNodes.sort((node1, node2) => node1.f > node2.f);       
 
         var self = this
         for (var childIndex = 0; childIndex < connectedNodes.length; childIndex++) {
@@ -74,9 +59,7 @@ AStarAlgorithm.prototype.run = function () {
             var openListContains = arrayContainsNode(self.OpenList, C)
             var closedListContains = arrayContainsNode(self.ClosedList, C)
 
-            if (!openListContains.contains && !closedListContains.contains) {
-                //self.probePosition(B.x, B.y, C.x, C.y);
-            }
+            this.probes.push({ x: C.x, y: C.y })
 
             if (C.equals(self.G)) {
                 var node = C;

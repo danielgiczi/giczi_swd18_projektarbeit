@@ -78,7 +78,7 @@ DijkstraAlgorithm.prototype.findInUnexploredList = function (node) {
 }
 
 DijkstraAlgorithm.prototype.isValidAdjacent = function (x, y) {
-    return this.map.isValidCoord(x, y) && !!this.findInUnexploredList(new Node(x, y));
+    return this.map.isValidCoord(x, y) && this.findInUnexploredList(new Node(x, y));
 }
 
 DijkstraAlgorithm.prototype.getAdjacentNodes = function (parent) {

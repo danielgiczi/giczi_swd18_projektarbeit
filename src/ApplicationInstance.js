@@ -5,14 +5,15 @@ import BreadthFirstSearchAlgorithm from './BreadthFirstSearchAlgorithm';
 import Map from "./Map"
 import Interface from "./Interface"
 import Canvas from "./Canvas"
+import DepthFirstSearchAlgorithm from "./DepthFirstSearchAlgorithm";
 
 function ApplicationInstance(sk) {
     this.Interface = new Interface();
     this.Canvas = new Canvas(sk, 28, this.destinationSet.bind(this));
 
     //Props
-    this.selectedMapIndex = 0;
-    this.selectedAlgorithmIndex = 0;
+    this.selectedMapIndex = 2;
+    this.selectedAlgorithmIndex = 1;
     this.simulationMode = true;
     this.gameFinished = false;
     this.destX = -1;
@@ -76,6 +77,9 @@ ApplicationInstance.prototype.init = function () {
         case 2:
             this.algorithm = new BreadthFirstSearchAlgorithm(this.map.startX, this.map.startY, algDestX, algDestY, this.map);
             break;
+        case 3:
+            this.algorithm = new DepthFirstSearchAlgorithm(this.map.startX, this.map.startY, algDestX, algDestY, this.map);
+            break;
     }
 
     this.Interface.refreshControls(this.simulationMode);
@@ -84,6 +88,8 @@ ApplicationInstance.prototype.init = function () {
 }
 
 ApplicationInstance.prototype.runAlgorithm = function () {
+    this.init();
+
     let startTime = performance.now();
     var result = this.algorithm.run();
     let finishTime = performance.now();

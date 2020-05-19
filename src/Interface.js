@@ -1,4 +1,15 @@
-function Interface() { }
+function Interface() {
+
+    $("#info-control").click(function () {
+        $("html").addClass("meta-show-info");        
+        $("body").append("<div id='overlay'></div>")
+
+        $("#overlay, #info").click(function(){
+            $("#overlay").remove();
+            $("html").removeClass("meta-show-info");        
+        })
+    })
+ }
 
 Interface.prototype.handleToggleSimulationMode = function (handler) {
     $("#toggle-mode").click(function () {
