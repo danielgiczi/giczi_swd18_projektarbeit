@@ -4,16 +4,7 @@ function AStarAlgorithm(startX, startY, goalX, goalY, map) {
     this.P = new Node(startX, startY);
     this.G = new Node(goalX, goalY);
     this.map = map;
-
     this.calculateCostsForNode(this.P);
-
-    this.OpenList = [this.P];
-    this.ClosedList = [];
-    this.B = {};
-    this.C = {};
-
-    this.probes = [];
-    this.paths = [];
 }
 
 //Page 108 AI Programmin wisdom Manhattan Distance
@@ -36,11 +27,17 @@ AStarAlgorithm.prototype.calculateCostsForNode = function (node) {
 }
 
 AStarAlgorithm.prototype.run = function () {
+    this.OpenList = [this.P];
+    this.ClosedList = [];
+    this.B = {};
+    this.C = {};
+
+    this.probes = [];
+    this.paths = [];
 
     loopOuter:
     while (true) {
         if (this.OpenList.length == 0) {
-            console.log("no path can be found");
             break
         }
 

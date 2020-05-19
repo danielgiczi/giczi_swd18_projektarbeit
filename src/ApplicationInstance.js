@@ -12,8 +12,8 @@ function ApplicationInstance(sk) {
     this.Canvas = new Canvas(sk, 28, this.destinationSet.bind(this));
 
     //Props
-    this.selectedMapIndex = 2;
-    this.selectedAlgorithmIndex = 1;
+    this.selectedMapIndex = 0;
+    this.selectedAlgorithmIndex = 2;
     this.simulationMode = true;
     this.gameFinished = false;
     this.destX = -1;
@@ -90,9 +90,21 @@ ApplicationInstance.prototype.init = function () {
 ApplicationInstance.prototype.runAlgorithm = function () {
     this.init();
 
-    let startTime = performance.now();
     var result = this.algorithm.run();
-    let finishTime = performance.now();
+    let median;
+
+    if(!this.simulationMode) {
+        let times = [];
+        for(let inx = 0; inx < 1000; inx++) {
+            let startTime = performance.now();
+            result = this.algorithm.run();
+            let finishTime = performance.now();
+            let executionTime = finishTime - startTime
+            times.push(executionTime)
+        }        
+        times = times.sort((a,b) => a - b);
+        median = times[Math.round(times.length/2,0)]
+    }
 
     this.probes = result.probes;
     this.paths = result.paths;
@@ -107,7 +119,7 @@ ApplicationInstance.prototype.runAlgorithm = function () {
     let html = `<span class='coords'>(${this.destX},${this.destY})</span>`
     html += `<div class='result'>        
         <span class='lang'>JS</span>
-        <span class='time'>${Math.round(finishTime - startTime, 5)} ms</span>
+        <span class='time'>${median} ms</span>
     </div>`
 
     $("#controls .game-controls .results").html("");
@@ -115,6 +127,7 @@ ApplicationInstance.prototype.runAlgorithm = function () {
 }
 
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {
+    if(this.simulationMode) return;
     if (this.gameFinished) {
         console.log("game finished");
         return;

@@ -3,9 +3,13 @@ import Node from "./DijkstraNode"
 function DijkstraAlgorithm(startX, startY, goalX, goalY, map) {
     this.P = new Node(startX, startY);
     this.G = new Node(goalX, goalY);
-
     this.map = map;
+}
 
+DijkstraAlgorithm.prototype.run = function () {
+
+    this.probes = [];
+    this.paths = [];
     this.UnexploredList = [];
     for (let x = 0; x < this.map.getWidth(); x++) {
         for (let y = 0; y < this.map.getHeight(); y++) {
@@ -21,15 +25,8 @@ function DijkstraAlgorithm(startX, startY, goalX, goalY, map) {
         }
     }
 
-    this.probes = [];
-    this.paths = [];
-}
-
-DijkstraAlgorithm.prototype.run = function () {
-
     while (true) {
         if (this.UnexploredList.length == 0) {
-            console.log("no path found");
             break;
         }
 

@@ -3,24 +3,19 @@ import Node from "./DepthFirstSearchNode"
 function DepthFirstSearchAlgorithm(startX, startY, goalX, goalY, map) {
     this.P = new Node(startX, startY);
     this.G = new Node(goalX, goalY);
-
     this.map = map;
-
-    this.visited = [];
-    this.stack = [];
-
-    this.stack.push(this.P);
-
-    this.probes = [];
-    this.paths =[];
 }
 
 DepthFirstSearchAlgorithm.prototype.run = function () {
+    this.visited = [];
+    this.stack = [];
+    this.stack.push(this.P);
+    this.probes = [];
+    this.paths =[];
 
     loop:
     while(true) {
         if(this.stack.length == 0) {
-            console.log("no path found");
             break;
         }
 

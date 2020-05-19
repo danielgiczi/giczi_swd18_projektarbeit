@@ -3,40 +3,23 @@ import Node from "./BreadthFirstSearchNode"
 function BreadthFirstSearchAlgorithm(startX, startY, goalX, goalY, map) {
     this.P = new Node(startX, startY);
     this.G = new Node(goalX, goalY);
-
     this.map = map;
-
-    this.visited = [];
-    this.queue = [];
-
-    this.queue.push(this.P);
-
-    this.probes = [];
-    this.paths =[];
 }
 
 BreadthFirstSearchAlgorithm.prototype.run = function () {
+    this.queue = [];
+    this.queue.push(this.P);
+    this.probes = [];
+    this.paths =[];
+    this.visited = [];
 
+    loop:
     while(true) {
         if(this.queue.length == 0) {
-            console.log("no path found");
             break;
         }
 
         var B = this.queue.shift();
-
-        if(B.equals(this.G)) {
-            var node = B;
-            var nextNode = node.parent;
-            while(!!node.parent) {
-                this.paths.push({x: node.x, y:node.y})
-                node = nextNode;
-                nextNode = node.parent;
-            }
-            this.paths.push({x: node.x, y:node.y})
-
-            break;
-        }
 
         var adjacentNodes = this.getUnivisitedAdjacentNodes(B);
         this.visited.push(B);
@@ -44,6 +27,19 @@ BreadthFirstSearchAlgorithm.prototype.run = function () {
         for(var adjacentNodeIndex = 0; adjacentNodeIndex < adjacentNodes.length; adjacentNodeIndex++)
         {
             var C = adjacentNodes[adjacentNodeIndex];
+
+            if(C.equals(this.G)) {
+                var node = C;
+                var nextNode = node.parent;
+                while(!!node.parent) {
+                    this.paths.push({x: node.x, y:node.y})
+                    node = nextNode;
+                    nextNode = node.parent;
+                }
+                this.paths.push({x: node.x, y:node.y})
+                break loop;
+            }
+
             this.visited.push(C);
             this.queue.push(C);
             this.probes.push({x: C.x, y:C.y})

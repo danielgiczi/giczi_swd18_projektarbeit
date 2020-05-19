@@ -7,7 +7,7 @@
 var maps = [];
 
 maps.push({
-    title: "No Walls",
+    title: "Empty",
     data: `
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
     0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0

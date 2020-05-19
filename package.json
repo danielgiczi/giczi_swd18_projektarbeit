@@ -12,12 +12,12 @@
     "type": "git",
     "url": "git+https://github.com/danielgiczi/giczi_swd18_projektarbeit.git"
   },
-  "author": "",
+  "author": "Daniel Giczi SWD18",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/danielgiczi/giczi_swd18_projektarbeit/issues"
   },
-  "homepage": "https://github.com/danielgiczi/giczi_swd18_projektarbeit#readme",
+  "homepage": "https://giczi-swd18-projektarbeit.herokuapp.com",
   "dependencies": {
     "express": "^4.17.1"
   },
