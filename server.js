@@ -26,7 +26,7 @@ var distDir = path.join(__dirname, "dist")
 
 app.use("/public",express.static('public'));
 
-if (process.env.NODE_ENV == "production") { 
+if (process.env.NODE_ENV != "development") { 
     app.get('/', function (req, res) {
         res.sendFile(path.join(distDir, 'index.html'))
     })
