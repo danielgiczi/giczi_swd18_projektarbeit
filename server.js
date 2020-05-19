@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.set('port', process.env.PORT || port)
+port = process.env.PORT || port
 app.use(bodyParser.json())
 
 var distDir = path.join(__dirname, "dist")
