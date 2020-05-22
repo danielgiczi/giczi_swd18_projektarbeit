@@ -95,7 +95,11 @@ ApplicationInstance.prototype.runAlgorithm = function () {
 
     if(!this.simulationMode) {
         let times = [];
-        for(let inx = 0; inx < 1000; inx++) {
+
+        let iterationCount = 1000;
+        if(this.selectedAlgorithmIndex == 1) iterationCount = 50;
+
+        for(let inx = 0; inx < iterationCount; inx++) {
             let startTime = performance.now();
             result = this.algorithm.run();
             let finishTime = performance.now();
@@ -107,6 +111,7 @@ ApplicationInstance.prototype.runAlgorithm = function () {
     }
 
     this.probes = result.probes;
+
     this.paths = result.paths;
     
     $("#controls .game-controls").addClass("finish");
@@ -129,7 +134,6 @@ ApplicationInstance.prototype.runAlgorithm = function () {
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {
     if(this.simulationMode) return;
     if (this.gameFinished) {
-        console.log("game finished");
         return;
     }
 

@@ -88,7 +88,6 @@ Canvas.prototype.setup = function (map, simulationMode) {
         canvas.mouseClicked(function () {
             if (self.highlightX < 0 || self.highlightY < 0) return;
             if (self.map.getCoordCost(self.highlightX, self.highlightY) == 8) {
-                console.log("wall clicked");
                 return;
             }
 

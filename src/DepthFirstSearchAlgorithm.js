@@ -41,9 +41,9 @@ DepthFirstSearchAlgorithm.prototype.run = function () {
                 break loop;
             }
 
+            this.probes.push({x: C.x, y: C.y})
             this.visited.push(C);
             this.stack.push(C);
-            this.probes.push({x: C.x, y:C.y})
         }
     }
 

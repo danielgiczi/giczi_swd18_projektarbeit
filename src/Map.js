@@ -74,13 +74,19 @@ Map.prototype.forEach = function(cb) {
 }
 
 Map.prototype.isValidCoord = function(x, y) {
-    if(x < 0) return false;
-    if(x >= this.getWidth()) return false;
-    if(y < 0) return false;
-    if(y >= this.getHeight()) return false;
+    if(!this.isWithinBounds(x,y)) return false
     var cost = this.getCoordCost(x,y);
     if(cost == 8) return false;
     return true;
 }
+
+Map.prototype.isWithinBounds = function(x, y) {
+    if(x < 0) return false;
+    if(x >= this.getWidth()) return false;
+    if(y < 0) return false;
+    if(y >= this.getHeight()) return false;
+    return true;
+}
+
 
 export default Map

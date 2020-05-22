@@ -4,7 +4,9 @@ function Node(x, y) {
     
     this.parent = null;
     this.distance = Infinity;
+    this.adjacents = [];
     this.selected = false;
+    this.weight = 0;
 }
 
 Node.prototype.equals = function (other) {
@@ -12,13 +14,8 @@ Node.prototype.equals = function (other) {
     return this.x == other.x && this.y == other.y;
 }
 
-Node.prototype.clone = function() {
-    var clone = new Node(this.x, this.y);
-    clone.parent = this.parent;
-    clone.distance = this.distance;
-    clone.selected = this.selected;
-
-    return clone;
+Node.prototype.key = function() {
+    return this.x + "|" + this.y;
 }
 
 export default Node
