@@ -206,6 +206,12 @@ body {
   display: none;
 }
 
+#controls .game-controls .reset-game i{
+  font-size: .7rem;
+  display: block; 
+  text-align: center;
+}
+
 .game-controls .info {
   color: #333;
   font-size: .9rem;
