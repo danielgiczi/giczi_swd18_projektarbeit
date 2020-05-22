@@ -22,17 +22,18 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(bodyParser.json())
 
-var distDir = path.join(__dirname, "dist")
 
 app.use("/public",express.static('public'));
 
 if (process.env.NODE_ENV != "development") { 
+    var prodDir = path.join(__dirname, "prod")
+
     app.get('/', function (req, res) {
-        res.sendFile(path.join(distDir, 'index.html'))
+        res.sendFile(path.join(prodDir, 'index.html'))
     })
 
     app.get('/main.bundle.js', function (req, res) {
-        res.sendFile(path.join(distDir, 'main.bundle.js'))
+        res.sendFile(path.join(prodDir, 'main.bundle.js'))
     })
 }
 
