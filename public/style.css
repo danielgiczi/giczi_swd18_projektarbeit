@@ -229,6 +229,11 @@ body {
   margin-right: 0.5rem;
 }
 
+.game-controls .result .lang {  
+  display: inline-block;
+  margin-right: 0.3rem;
+}
+
 .game-controls .result:not(:last-child) {  
   padding-right:.5rem;
   border-right:1px solid #666;

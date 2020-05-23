@@ -5,6 +5,13 @@
 // D....Destination
 
 var maps = [];
+/*
+maps.push({
+    title: "Asd",
+    data: `
+    S 0 0 0 0 D
+    `
+})*/
 
 maps.push({
     title: "Empty",

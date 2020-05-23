@@ -13,7 +13,7 @@ function ApplicationInstance(sk) {
 
     //Props
     this.selectedMapIndex = 0;
-    this.selectedAlgorithmIndex = 2;
+    this.selectedAlgorithmIndex = 3;
     this.simulationMode = true;
     this.gameFinished = false;
     this.destX = -1;
@@ -87,27 +87,84 @@ ApplicationInstance.prototype.init = function () {
     this.Canvas.setup(this.map);
 }
 
-ApplicationInstance.prototype.runAlgorithm = function () {
+ApplicationInstance.prototype.runCSharpAlgorithm = function () {
+    let algDestX;
+    let algDestY;
+
+    if (this.simulationMode) {
+        algDestX = this.map.destX;
+        algDestY = this.map.destY;
+    }
+    else {
+        algDestX = this.destX;
+        algDestY = this.destY;
+    }
+    let mapData = maps[this.Interface.getSelectedMap()].data;
+    return window.invokeCSharpAlgorithm(Number(this.selectedAlgorithmIndex), Number(this.map.startX), Number(this.map.startY), Number(algDestX), Number(algDestY), mapData)
+}
+
+ApplicationInstance.prototype.benchmarkJSAlgorithm = function() {
+    let times = [];
+
+    let iterationBaseCount = 1000;
+    if(this.selectedAlgorithmIndex == 1) iterationBaseCount = iterationBaseCount / 20;
+
+    for(let inx = 0; inx < iterationBaseCount; inx++) {
+        let startTime = performance.now();
+        let result = this.algorithm.run();
+        let finishTime = performance.now();
+        let executionTime = finishTime - startTime
+        times.push(executionTime)
+    }        
+    times = times.sort((a,b) => a - b);
+    let median = times[Math.round(times.length/2,0)]
+
+    return median;
+}
+
+ApplicationInstance.prototype.benchmarkCSharpAlgorithm = async function() {
+    let times = [];
+    let selfTimes = [];
+
+    let iterationBaseCount = 5;
+
+    for(let inx = 0; inx < iterationBaseCount; inx++) {
+        let startTime = performance.now();
+        let result = await this.runCSharpAlgorithm();
+        selfTimes.push(result.ms);
+        let finishTime = performance.now();
+        let executionTime = finishTime - startTime
+        times.push(executionTime)
+    }        
+    times = times.sort((a,b) => a - b);
+    let median = times[Math.round(times.length/2,0)]
+
+    selfTimes = selfTimes.sort((a,b) => a - b);
+    let selfMedian = selfTimes[Math.round(selfTimes.length/2,0)]
+
+    return { median: median, selfMedian: selfMedian};
+}
+
+ApplicationInstance.prototype.runAlgorithm = async function () {
     this.init();
 
-    var result = this.algorithm.run();
-    let median;
+    let result;
+
+    //JS
+    //result = this.algorithm.run();
+
+    //C#
+    result = await this.runCSharpAlgorithm();
+
+    let medianJS;
+    let medianCSharp;
+    let medianCSharpSelf;
 
     if(!this.simulationMode) {
-        let times = [];
-
-        let iterationCount = 1000;
-        if(this.selectedAlgorithmIndex == 1) iterationCount = 50;
-
-        for(let inx = 0; inx < iterationCount; inx++) {
-            let startTime = performance.now();
-            result = this.algorithm.run();
-            let finishTime = performance.now();
-            let executionTime = finishTime - startTime
-            times.push(executionTime)
-        }        
-        times = times.sort((a,b) => a - b);
-        median = times[Math.round(times.length/2,0)]
+        medianJS = this.benchmarkJSAlgorithm()
+        var res = await this.benchmarkCSharpAlgorithm();
+        medianCSharp = res.median;
+        medianCSharpSelf = res.selfMedian;
     }
 
     this.probes = result.probes;
@@ -121,14 +178,15 @@ ApplicationInstance.prototype.runAlgorithm = function () {
         this.gameY  = this.Canvas.coordToCenteredPosition(this.map.startY);
     }
 
-    let html = `<span class='coords'>(${this.destX},${this.destY})</span>`
-    html += `<div class='result'>        
-        <span class='lang'>JS</span>
-        <span class='time'>${median} ms</span>
-    </div>`
+    let html = "";
 
-    $("#controls .game-controls .results").html("");
-    $("#controls .game-controls .results").append(html)
+    if(!this.simulationMode) {
+        html += `<span class='coords'>(${this.destX},${this.destY})</span>`
+        html += `<div class='result'><span class='lang'>JS</span><span class='time'>${medianJS.toFixed(6)} ms</span></div>`
+        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${medianCSharp.toFixed(6)}|${medianCSharpSelf.toFixed(6)} ms</span></div>`
+    }
+
+    $("#controls .game-controls .results").html(html);
 }
 
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {

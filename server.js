@@ -25,9 +25,9 @@ app.use(bodyParser.json())
 
 app.use("/public",express.static('public'));
 
-if (process.env.NODE_ENV != "development") { 
-    var prodDir = path.join(__dirname, "prod")
+var prodDir = path.join(__dirname, "prod")
 
+if (process.env.NODE_ENV != "development") { 
     app.get('/', function (req, res) {
         res.sendFile(path.join(prodDir, 'index.html'))
     })
@@ -36,6 +36,12 @@ if (process.env.NODE_ENV != "development") {
         res.sendFile(path.join(prodDir, 'main.bundle.js'))
     })
 }
+
+
+app.use('/_framework', express.static("prod/_framework"));
+app.get('/favicon.ico', function (req, res) {    
+    res.end();
+})
 
 const PORT = process.env.PORT ||3000
 app.listen(PORT, function(){
