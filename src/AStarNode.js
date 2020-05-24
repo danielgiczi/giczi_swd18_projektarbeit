@@ -14,17 +14,4 @@ Node.prototype.equals = function (other) {
     return this.x == other.x && this.y == other.y;
 }
 
-Node.prototype.clone = function() {
-    var clone = new Node(this.x, this.y);
-    clone.f = this.f;
-    clone.g = this.g;
-    clone.h = this.h;
-    clone.parent = this.parent;
-    if(this.next){
-        clone.next = this.next.clone();
-    }
-
-    return clone;
-}
-
 export default Node

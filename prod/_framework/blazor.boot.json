@@ -30,7 +30,7 @@
       "System.Drawing.Common.dll": "sha256-vcCLMX4xAsUqKuQjjIkzu1O9pHGO\/tdvysgSmEjL6oo=",
       "System.Data.DataSetExtensions.dll": "sha256-eejp4oI3sQBq\/tI6GsJNaPu3Dkdot5Vbn8+R3w2vYLE=",
       "System.Data.dll": "sha256-dxfTuT6ffPMmvuUUTfv7+bpLtOZZZHQdz77hjhy9qHw=",
-      "Algorithms.dll": "sha256-PIHYgOiGiokLh74s8YXqdmh4n0glv3Q9bfEgqOdQ3+s=",
+      "Algorithms.dll": "sha256-1gq96tgq\/VaigB0zrsmqLv9hmr+Prviga1rM16s7AZY=",
       "Microsoft.JSInterop.dll": "sha256-K3dpli228kQQ75WVqoiIdmn8u8q8gZHixcWDdCHCRgU=",
       "System.Text.Encodings.Web.dll": "sha256-hbEA2pdvgll2bWeJXCtehEV3kl3WFnBgQj6ttcesEA4=",
       "System.Text.Json.dll": "sha256-pzCorxTCjbUODF5JuRgcHc8gVYEdSaKD9NWA6wZhTPE=",
@@ -61,7 +61,7 @@
     },
     "pdb": {
       "Web.pdb": "sha256-m7Ik2eprDOIe7M4tz+\/1nqKaVZW155TNLtiiqF\/e6NY=",
-      "Algorithms.pdb": "sha256-zEXPFJR6WXOVgpGb9JGvvn6ABkbMSbxjk6Iwu6yGjzU="
+      "Algorithms.pdb": "sha256-qRSe4NWTrPIN7DOL4bfWhImf\/BuZ6R3ZzLVEqsCBYZo="
     },
     "runtime": {
       "dotnet.3.2.0.js": "sha256-mPoqx7XczFHBWk3gRNn0hc9ekG1OvkKY4XiKRY5Mj5U=",

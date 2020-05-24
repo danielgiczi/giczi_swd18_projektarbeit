@@ -13,7 +13,7 @@ function ApplicationInstance(sk) {
 
     //Props
     this.selectedMapIndex = 0;
-    this.selectedAlgorithmIndex = 3;
+    this.selectedAlgorithmIndex = 2;
     this.simulationMode = true;
     this.gameFinished = false;
     this.destX = -1;
@@ -151,10 +151,10 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
     let result;
 
     //JS
-    //result = this.algorithm.run();
+    result = this.algorithm.run();
 
     //C#
-    result = await this.runCSharpAlgorithm();
+    //result = await this.runCSharpAlgorithm();
 
     let medianJS;
     let medianCSharp;
