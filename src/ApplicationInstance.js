@@ -189,7 +189,9 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
     if(!this.simulationMode) {
         html += `<span class='coords'>(${this.destX},${this.destY})</span>`
         html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(medianJS)} ms</span></div>`
-        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${FormatMedian(medianCSharp)} | ${FormatMedian(medianCSharpSelf)} ms</span></div>`
+        if(!!medianCSharp) {
+            html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${FormatMedian(medianCSharp)} | ${FormatMedian(medianCSharpSelf)} ms</span></div>`
+        }
     }
 
     $("#controls .game-controls .results").html(html);
