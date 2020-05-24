@@ -38,7 +38,7 @@ if (process.env.NODE_ENV != "development") {
 }
 
 
-app.use('/_framework', express.static("prod/_framework"));
+app.use('/_framework', express.static("prod-csharp/_framework"));
 app.get('/favicon.ico', function (req, res) {    
     res.end();
 })
