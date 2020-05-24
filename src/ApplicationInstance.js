@@ -162,9 +162,15 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
     if(!this.simulationMode) {
         medianJS = this.benchmarkJSAlgorithm()
-        var res = await this.benchmarkCSharpAlgorithm();
-        medianCSharp = res.median;
-        medianCSharpSelf = res.selfMedian;
+        try {
+            var res = await this.benchmarkCSharpAlgorithm();
+            medianCSharp = res.median;
+            medianCSharpSelf = res.selfMedian;
+        }
+        catch(e) {
+            console.error("error running C# code")
+            console.error(e);
+        }
     }
 
     this.probes = result.probes;
