@@ -182,11 +182,20 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
     if(!this.simulationMode) {
         html += `<span class='coords'>(${this.destX},${this.destY})</span>`
-        html += `<div class='result'><span class='lang'>JS</span><span class='time'>${medianJS.toFixed(6)} ms</span></div>`
-        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${medianCSharp.toFixed(6)}|${medianCSharpSelf.toFixed(6)} ms</span></div>`
+        html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(medianJS)} ms</span></div>`
+        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${FormatMedian(medianCSharp)} | ${FormatMedian(medianCSharpSelf)} ms</span></div>`
     }
 
     $("#controls .game-controls .results").html(html);
+}
+
+function FormatMedian(input) {
+    if(input > 10) {
+        return input.toFixed(2);
+    }
+    else {
+        return input.toFixed(6);
+    }
 }
 
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {
