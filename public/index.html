@@ -85,7 +85,7 @@
                     <h2>Simulation</h2>               
                     <div class="par">
                         <p>Die initiale Ansicht "Simulation" dient zur veranscaulichung der einzelnen Algorithmen.<br>
-                        Zwischen Karten und Algorithmen kann man mit Hilfe von den beiden Select-Boxen oberhalb umschalten.<br></p>
+                        Zwischen Karten und Algorithmen kann man mit Hilfe von den beiden Select-Boxen umschalten.<br></p>
                     </div>
                     <figure>
                         <img src="/public/imgs/simulation.png"/>
@@ -137,20 +137,20 @@
 
                     <div class="par">
                         <h3>Javascript</h3>
-                        <p>Der Javascript Engine führt automatisch Optimierungen durch. Eine genaue Zeitmessung ist daher über einzelnen Berechnungen nicht möglich.
-                        Aus dem Grunde wird der Algorithmus in JavaScript 1000-Mal durchgeführt und die Zeit wird jeweils gemessen.<br>
-                        Von den Zeiten wird das Median ermittelt welcher als Resultat angezeigt wird.</p>
+                        <p>Der Javascript Engine führt bei Programmausführung automatisch Optimierungen durch. Eine genaue Zeitmessung ist daher über einzelnen Berechnungen nicht sinnvoll.<br>
+                        Zur Ermittlung der zum Durschschnitt benötigten Zeit wird der Algorithmus 1000-Mal ausgeführt. Aus den jeweils gemessenen Laufzeiten wird der Median ermittelt und als Resultat dargestellt.
                     </div>
 
                     <div class="par">
                         <h3>PHP</h3>
-                        <p>Bei Auswahl des Ziels wird über AJAX eine PHP-Api aufgerufen, welche die Berechnungen durchführt.<br>
-                        Die dafür benötigte Zeit wird vom PHP Skript gemessen und als Resultat zurückgeliefert.</p>
+                        <p>Bei Auswahl des Ziels wird über AJAX eine PHP-API aufgerufen, welche die Berechnungen durchführt.<br>
+                        Die dafür benötigte Zeit wird von dem PHP Skript gemessen und als Resultat zurückgeliefert.</p>
                     </div>
 
                     <div class="par">
                         <h3>C# WASM</h3>
-                        <p>Durch WASM / Blazor werden die C# DLLs im Browser kompiliert und ausgeführt.<br></p>
+                        <p>WebAssembly ermöglicht die Kompilierung und Ausführung von C# DLLs direkt im Browser.<br>
+                        Die im objektorientierten C# geschriebenen Algorithmen führen ebenfalls die gleichen Berechnungen und Zeitmessung durch.<br>
                     </div>
                 </div>
             </div>
