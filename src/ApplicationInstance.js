@@ -213,7 +213,7 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
         html += `<span class='coords'>(${this.destX},${this.destY})</span>`
         html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(timeJS)} ms</span></div>`
         let csharp = "";
-        if(!timeCSharp) {
+        if(timeCSharp == null) {
             csharp = "Fehler";
         }
         else{
@@ -222,7 +222,7 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
         html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${csharp}</span></div>`
 
         let php = "";
-        if(!timePHP) {
+        if(timePHP == null) {
             php = "Fehler";
         }
         else {
