@@ -81,21 +81,78 @@
         <div id="info">
             <div class="info-wrapper">
                 <h1>Vergleich von Wegfindungsalgorithmen</h1>
-                <p>
-                    <h2>Simulation</h2>
-                    <p>
-                        Die initiale Ansicht "Simulation" dient zur veranscaulichung der einzelnen Algorithmen.<br>
-                        Zwischen Karten und Algorithmen kann man mit Hilfe von den beiden Select-Boxen oberhalb umschalten.<br>
-                        Die Simulation lässt sich anschließend mit den unteren Tasten "Start" und "Reset" steuern.
-                    </p>
-                    <h2>Benchmark</h2>
-                    <p>
-                        In diesem Modus wird der gewählte Algorithmus erst beim Auswahl einer Koordinate auf der Karte gestartet.<br>
-                        Der Algorithmus wird in echter Zeit ausgeführt und die Spielfigur (grün) wird über den ermittelten Pfad zum Ziel (rot) hinzubewegt.<br>
-                        Die gemessene Performanz wird unterhalb unter "Results" eingeblendet.<br>
-                        Dabei wird der gewählte Algorithmus 1000-mal durchgeführt und das Median als Ergebnis dargestellt.
-                    </p>
-                </p>
+                <div>
+                    <h2>Simulation</h2>               
+                    <div class="par">
+                        <p>Die initiale Ansicht "Simulation" dient zur veranscaulichung der einzelnen Algorithmen.<br>
+                        Zwischen Karten und Algorithmen kann man mit Hilfe von den beiden Select-Boxen oberhalb umschalten.<br></p>
+                    </div>
+                    <figure>
+                        <img src="/public/imgs/simulation.png"/>
+                        <figcaption>Simulationsmodus ist aktiv</figcaption>
+                    </figure>
+
+                    <figure>
+                        <img src="/public/imgs/maps.png"/>
+                        <figcaption>Auswahl der Spielkarte</figcaption>
+                    </figure>
+
+                    <figure>
+                        <img src="/public/imgs/algs.png"/>
+                        <figcaption>Auswahl des Algorithmen</figcaption>
+                    </figure>
+
+                    <div class="par">
+                        <p>Die Simulation lässt sich anschließend entweder mit den Schaltflächen "Start" und "Reset" oder den Tasten "S" und "R" steuern.</p>
+                    </div>
+
+                    <figure>
+                        <img src="/public/imgs/startreset.PNG" />
+                        <figcaption>Simulation starten / zurücksetzen</figcaption>
+                    </figure>
+                   
+                    <div class="par">
+                        <h2>Benchmark</h2>
+                        <p>In diesem Modus wird der gewählte Algorithmus erst beim Auswahl einer Koordinate auf der Karte gestartet.<br></p>
+                    </div>
+
+                    <figure>
+                        <img src="/public/imgs/simulation.png"/>
+                        <figcaption>Benchmarking ist aktiv</figcaption>
+                    </figure>
+
+                    <figure>
+                        <img src="/public/imgs/highlight.PNG" />
+                        <figcaption>Auswahl des Ziels</figcaption>
+                    </figure>
+                    
+                    <div class="par">
+                        <p>Der gewählte Algorithmus wird dabei in JavaScript, PHP und C# (WASM) ausgeführt.</p>
+                    </div>
+
+                    <figure>
+                        <img src="/public/imgs/time.PNG" />
+                        <figcaption>Gemessene Ausführungszeiten je Skriptsprache</figcaption>
+                    </figure>
+
+                    <div class="par">
+                        <h3>Javascript</h3>
+                        <p>Der Javascript Engine führt automatisch Optimierungen durch. Eine genaue Zeitmessung ist daher über einzelnen Berechnungen nicht möglich.
+                        Aus dem Grunde wird der Algorithmus in JavaScript 1000-Mal durchgeführt und die Zeit wird jeweils gemessen.<br>
+                        Von den Zeiten wird das Median ermittelt welcher als Resultat angezeigt wird.</p>
+                    </div>
+
+                    <div class="par">
+                        <h3>PHP</h3>
+                        <p>Bei Auswahl des Ziels wird über AJAX eine PHP-Api aufgerufen, welche die Berechnungen durchführt.<br>
+                        Die dafür benötigte Zeit wird vom PHP Skript gemessen und als Resultat zurückgeliefert.</p>
+                    </div>
+
+                    <div class="par">
+                        <h3>C# WASM</h3>
+                        <p>Durch WASM / Blazor werden die C# DLLs im Browser kompiliert und ausgeführt.<br></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

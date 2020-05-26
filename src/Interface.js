@@ -4,7 +4,7 @@ function Interface() {
         $("html").addClass("meta-show-info");        
         $("body").append("<div id='overlay'></div>")
 
-        $("#overlay, #info").click(function(){
+        $("#overlay").click(function(){
             $("#overlay").remove();
             $("html").removeClass("meta-show-info");        
         })

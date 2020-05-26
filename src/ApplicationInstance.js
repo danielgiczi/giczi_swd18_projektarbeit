@@ -212,14 +212,6 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
     if(!this.simulationMode) {
         html += `<span class='coords'>(${this.destX},${this.destY})</span>`
         html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(timeJS)} ms</span></div>`
-        let csharp = "";
-        if(timeCSharp == null) {
-            csharp = "Fehler";
-        }
-        else{
-            csharp = FormatMedian(timeCSharp)  + " ms";
-        }
-        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${csharp}</span></div>`
 
         let php = "";
         if(timePHP == null) {
@@ -230,6 +222,16 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
         }
         
         html += `<div class='result'><span class='lang'>PHP</span><span class='time'>${php}</span></div>`
+
+        let csharp = "";
+        if(timeCSharp == null) {
+            csharp = "Fehler";
+        }
+        else{
+            csharp = FormatMedian(timeCSharp)  + " ms";
+        }
+        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${csharp}</span></div>`
+
     }
 
     $("#controls .game-controls .results").html(html);
