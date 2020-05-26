@@ -3,6 +3,7 @@ function Canvas(sk, imgSize, setDest) {
 
     this.sk = sk;
     this.imgTile;
+    this.imgTileAlt;
     this.imgWall;
     this.imgSize = imgSize;
     this.imgWeight;
@@ -23,6 +24,7 @@ Canvas.prototype.preload = function () {
     else {
         this.imgTile = this.sk.loadImage("public/tiles/tilemap_v1_09.png")
     }
+    this.imgTileAlt = this.sk.loadImage("public/tiles/tilemap_v1_12.png");
 
     this.imgWall = this.sk.loadImage("public/tiles/tilemap_v1_10.png")
     this.imgM5 = this.sk.loadImage("public/tiles/tilemap_v1_05.png")
@@ -74,6 +76,7 @@ Canvas.prototype.setup = function (map, simulationMode) {
             let imgToDraw;
             switch (Math.abs(val)) {
                 case 0: imgToDraw = self.imgTile; break;
+                //case 0: imgToDraw = self.imgTileAlt; break; //doch nicht, schaut nicht schön aus, zu viele 1er
                 case 5: imgToDraw = self.imgM5; break;
                 case 8: imgToDraw = self.imgWall; break;
             }

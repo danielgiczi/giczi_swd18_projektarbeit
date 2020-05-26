@@ -12,6 +12,11 @@ function Interface() {
  }
 
 Interface.prototype.handleToggleSimulationMode = function (handler) {
+    $(document).keydown(function (e) {
+        if (e.which == 66) {
+            handler();
+        }
+    });
     $("#toggle-mode").click(function () {
         handler();
     })
@@ -29,11 +34,21 @@ Interface.prototype.handleResetGame = function (handler) {
 }
 
 Interface.prototype.handleResetSimulation = function (handler) {
+    $(document).keydown(function (e) {
+        if (e.which == 82) {
+            handler();
+        }
+    });
     $("#controls .reset-simulation").click(function () {
         handler();
     })
 }
 Interface.prototype.handleRunAlgorithm = function(handler) {
+    $(document).keydown(function (e) {
+        if (e.which == 83) {
+            handler();
+        }
+    });
     $("#controls .start-simulation").click(function () {
         handler();
     })

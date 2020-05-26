@@ -111,7 +111,7 @@ ApplicationInstance.prototype.benchmarkJSAlgorithm = function() {
 
     for(let inx = 0; inx < iterationBaseCount; inx++) {
         let startTime = performance.now();
-        let result = this.algorithm.run();
+        this.algorithm.run();
         let finishTime = performance.now();
         let executionTime = finishTime - startTime
         times.push(executionTime)
@@ -122,27 +122,42 @@ ApplicationInstance.prototype.benchmarkJSAlgorithm = function() {
     return median;
 }
 
-ApplicationInstance.prototype.benchmarkCSharpAlgorithm = async function() {
-    let times = [];
-    let selfTimes = [];
+ApplicationInstance.prototype.runPhpAlgorithm = function () {
+    let algDestX;
+    let algDestY;
 
-    let iterationBaseCount = 5;
+    if (this.simulationMode) {
+        algDestX = this.map.destX;
+        algDestY = this.map.destY;
+    }
+    else {
+        algDestX = this.destX;
+        algDestY = this.destY;
+    }
 
-    for(let inx = 0; inx < iterationBaseCount; inx++) {
-        let startTime = performance.now();
-        let result = await this.runCSharpAlgorithm();
-        selfTimes.push(result.ms);
-        let finishTime = performance.now();
-        let executionTime = finishTime - startTime
-        times.push(executionTime)
-    }        
-    times = times.sort((a,b) => a - b);
-    let median = times[Math.round(times.length/2,0)]
+    let mapData = maps[this.Interface.getSelectedMap()].data;
 
-    selfTimes = selfTimes.sort((a,b) => a - b);
-    let selfMedian = selfTimes[Math.round(selfTimes.length/2,0)]
+    let live = document.location.href.indexOf("heroku") > -1;
 
-    return { median: median, selfMedian: selfMedian};
+    let url = "http://localhost/giczi_swd18_projektarbeit_php/api.php";
+    if(live) {
+        url = "https://giczi-swd18-projektarbeit-php.herokuapp.com/api.php";
+    }
+
+    return $.ajax({        
+        url: url,
+        type: "POST",
+        contentType:"application/json; charset=utf-8",
+        dataType:"json",
+        data: JSON.stringify({
+            AlgorithmIndex: Number(this.selectedAlgorithmIndex),
+            StartX: this.map.startX,
+            StartY: this.map.startY,
+            DestX:  Number(algDestX),
+            DestY: Number(algDestY),
+            MapData: mapData
+        })
+    })   
 }
 
 ApplicationInstance.prototype.runAlgorithm = async function () {
@@ -152,29 +167,37 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
     //JS
     result = this.algorithm.run();
+    //console.log(result);
+    //PHP
+    //result = await this.runPhpAlgorithm(false);
+    //console.log(result);
 
     //C#
     //result = await this.runCSharpAlgorithm();
 
-    let medianJS;
-    let medianCSharp;
-    let medianCSharpSelf;
+    let timeJS;
+    let timeCSharp
+    let timePHP;
 
     if(!this.simulationMode) {
-        medianJS = this.benchmarkJSAlgorithm()
+        timeJS = this.benchmarkJSAlgorithm()
         try {
-            var res = await this.benchmarkCSharpAlgorithm();
-            medianCSharp = res.median;
-            medianCSharpSelf = res.selfMedian;
+            var res = await this.runCSharpAlgorithm();
+            timeCSharp = res.ms;
         }
         catch(e) {
-            console.error("error running C# code")
-            console.error(e);
+            console.error("error running C# code", e)
+        }
+        try {
+            var res = await this.runPhpAlgorithm();
+            timePHP = res.ms;
+        }
+        catch(e) {
+            console.error("error running php code", e)
         }
     }
 
     this.probes = result.probes;
-
     this.paths = result.paths;
     
     $("#controls .game-controls").addClass("finish");
@@ -188,10 +211,25 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
     if(!this.simulationMode) {
         html += `<span class='coords'>(${this.destX},${this.destY})</span>`
-        html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(medianJS)} ms</span></div>`
-        if(!!medianCSharp) {
-            html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${FormatMedian(medianCSharp)} | ${FormatMedian(medianCSharpSelf)} ms</span></div>`
+        html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(timeJS)} ms</span></div>`
+        let csharp = "";
+        if(!timeCSharp) {
+            csharp = "Fehler";
         }
+        else{
+            csharp = FormatMedian(timeCSharp)  + " ms";
+        }
+        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${csharp}</span></div>`
+
+        let php = "";
+        if(!timePHP) {
+            php = "Fehler";
+        }
+        else {
+            php = FormatMedian(timePHP) + " ms";
+        }
+        
+        html += `<div class='result'><span class='lang'>PHP</span><span class='time'>${php}</span></div>`
     }
 
     $("#controls .game-controls .results").html(html);

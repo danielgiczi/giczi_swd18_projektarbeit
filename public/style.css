@@ -152,6 +152,15 @@ body {
   cursor: pointer;
 }
 
+#toggle-mode i {
+  position: absolute;
+  top:60%;
+  left:0;
+  right:0;
+  font-size: .8em;
+  text-align: center;
+}
+
 .meta-show-simulation-controls #toggle-mode .simulation {
   display: block;
 }
@@ -199,6 +208,7 @@ body {
 #controls .game-controls .reset-game {
   position: absolute;
   right:2rem;
+  line-height:initial;
   top:50%;
   transform:translateY(-50%);
   padding:1rem 2rem;
@@ -206,7 +216,8 @@ body {
   display: none;
 }
 
-#controls .game-controls .reset-game i{
+#controls .game-controls .reset-game i,
+#controls .simulation-controls .button i{
   font-size: .7rem;
   display: block; 
   text-align: center;
@@ -240,7 +251,7 @@ body {
 }
 
 .game-controls .results:before {
-  content:'Results';
+  content:'ALGORITHM RUN TIME';
   position: absolute;
   color: #333;
   text-transform: uppercase;
@@ -249,9 +260,8 @@ body {
 }
 
 .game-controls .results:empty:after {
-  content:'No previous commands';
+  content:'Please run the algorithm to see the times';
   color: #333;
-  text-transform: uppercase;
   font-size: .9rem;
   top:0.6rem;
 }
@@ -311,6 +321,8 @@ body {
   text-transform: uppercase;
   transition: background-color 400ms ease, color 400ms ease;
   display: inline-block;
+  text-align: center;
+  line-height: 110%;
 }
 
 .button:hover{
