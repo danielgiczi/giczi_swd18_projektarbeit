@@ -10,6 +10,11 @@ function Canvas(sk, imgSize, setDest) {
     this.highlightY = -1;
     this.setDest = setDest;
     this.id;
+
+    this.circleSize = this.imgSize - 6;
+    if(this.imgSize < 5) {
+        this.circleSize = 10;
+    }
 }
 
 Canvas.prototype.setup = function (map, simulationMode) {
@@ -33,35 +38,46 @@ Canvas.prototype.setup = function (map, simulationMode) {
     thisWrapper.className="wrapper";
     container.appendChild(thisWrapper);
 
-    var topCoords = document.createElement("DIV");
-    topCoords.className="top-coords coords";
-    thisWrapper.appendChild(topCoords);
+    if(map.getWidth() < 100) {
+        var topCoords = document.createElement("DIV");
+        topCoords.className="top-coords coords";
+        thisWrapper.appendChild(topCoords);
+    
+        var rightCoords = document.createElement("DIV")
+        rightCoords.className="right-coords coords";
+        thisWrapper.appendChild(rightCoords);
+    
+        var bottomCoords = document.createElement("DIV")
+        bottomCoords.className="bottom-coords coords";
+        thisWrapper.appendChild(bottomCoords);
+    
+        var leftCoords = document.createElement("DIV")
+        leftCoords.className="left-coords coords";
+        thisWrapper.appendChild(leftCoords);
 
-    var rightCoords = document.createElement("DIV")
-    rightCoords.className="right-coords coords";
-    thisWrapper.appendChild(rightCoords);
+        for (let x = 0; x < map.getHeight(); x++) {
+            var thisCoord = document.createElement("div")
+            thisCoord.innerText = x;
+            leftCoords.append(thisCoord)
+            rightCoords.append(thisCoord.cloneNode(true))
+        }
 
-    var bottomCoords = document.createElement("DIV")
-    bottomCoords.className="bottom-coords coords";
-    thisWrapper.appendChild(bottomCoords);
-
-    var leftCoords = document.createElement("DIV")
-    leftCoords.className="left-coords coords";
-    thisWrapper.appendChild(leftCoords);
-
-    for (let x = 0; x < map.getHeight(); x++) {
-        var thisCoord = document.createElement("div")
-        thisCoord.innerText = x;
-        leftCoords.append(thisCoord)
-        rightCoords.append(thisCoord.cloneNode(true))
+        for (let x = 0; x < map.getWidth(); x++) {
+            var thisCoord = document.createElement("div")
+            thisCoord.innerText = x;
+            topCoords.append(thisCoord)
+            bottomCoords.append(thisCoord.cloneNode(true))
+        }
     }
 
-    for (let x = 0; x < map.getWidth(); x++) {
-        var thisCoord = document.createElement("div")
-        thisCoord.innerText = x;
-        topCoords.append(thisCoord)
-        bottomCoords.append(thisCoord.cloneNode(true))
-    }
+    let size = document.getElementById("size");
+    if(!!size) size.remove();
+    size = document.createElement("DIV");
+    size.id="size"
+    let span = document.createElement("SPAN");
+    span.innerHTML = map.getWidth() + " x " + map.getHeight();
+    size.appendChild(span);
+    container.appendChild(size);
 
     var canvas = this.sk.createCanvas(canvasWidth, canvasHeight);
     this.pg = this.sk.createGraphics(canvasWidth, canvasHeight);
@@ -123,7 +139,7 @@ Canvas.prototype.draw = function (simulationMode, gameFinished, destX, destY, pr
     this.renderDestination(destX, destY);
 
     this.sk.fill("red");
-    this.sk.circle(startX, startY, this.imgSize - 6);
+    this.sk.circle(startX, startY, this.circleSize);
 }
 
 Canvas.prototype.renderHighlight = function () {
@@ -140,7 +156,7 @@ Canvas.prototype.renderDestination = function (destX, destY) {
     this.sk.fill("green")
     this.sk.circle(
         this.coordToCenteredPosition(destX),
-        this.coordToCenteredPosition(destY), this.imgSize - 6)
+        this.coordToCenteredPosition(destY), this.circleSize)
 }
 
 let probeIndex = 0;
@@ -166,7 +182,7 @@ Canvas.prototype.drawProbes = function (probes, paths) {
     this.sk.stroke("#000");
     this.sk.strokeWeight(1)
 
-    probeIndex += 5;
+    probeIndex += Math.round(probes.length * 0.02);
     if (probeIndex > probes.length) {
         probeIndex = probes.length;
     }

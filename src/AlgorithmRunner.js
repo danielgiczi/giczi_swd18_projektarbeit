@@ -58,7 +58,9 @@ AlgorithmRunner.prototype.initJsAlgorithm = function() {
 
 AlgorithmRunner.prototype.runJSAlgorithm = function() {
     this.initJsAlgorithm();
-    return this.algorithm.run();
+    let res = this.algorithm.run();
+    //console.log(res);
+    return res;
 }
 
 AlgorithmRunner.prototype.benchmarkJSAlgorithm = function() {
@@ -75,7 +77,11 @@ AlgorithmRunner.prototype.benchmarkJSAlgorithm = function() {
         this.algorithm.run();
         let finishTime = performance.now();
         let executionTime = finishTime - startTime
+        if(executionTime > 0.1) {
+            iterationBaseCount = 3;
+        }
         times.push(executionTime)
+        
     }        
     times = times.sort((a,b) => a - b);
     let median = times[Math.round(times.length/2,0)]

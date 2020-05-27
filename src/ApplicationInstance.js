@@ -7,10 +7,8 @@ import AlgorithmRunner from "./AlgorithmRunner";
 function ApplicationInstance(sk) {
     this.Interface = new Interface();
     this.runner = new AlgorithmRunner(this)
-
-    let imgSize = 26;
-    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
-    this.Canvas = new Canvas(sk, imgSize, this.destinationSet.bind(this));
+    
+    this.sk = sk;
 
     //Props
     this.selectedMapIndex = 0;
@@ -49,14 +47,24 @@ ApplicationInstance.prototype.init = function () {
     this.probes = [];
     this.paths = []
 
-    let mapData = maps[this.Interface.getSelectedMap()].data;
-    this.map = new Map(mapData);
+    let mapData = maps[this.Interface.getSelectedMap()];
+    let imgSize = mapData.imgSize || 24;
+    this.map = new Map(mapData.data);
 
     this.gameX = -1;
     this.gameY = -1;
     this.gameMoveInx = 0;
 
     this.Interface.refreshControls(this.simulationMode);
+
+    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
+
+    var wrapper = document.querySelectorAll("#canvas-container .wrapper")
+    wrapper.forEach((el) => {
+        el.remove();
+    })
+
+    this.Canvas = new Canvas(this.sk, imgSize, this.destinationSet.bind(this));
 
     this.Canvas.setup(this.map);
 }
@@ -74,36 +82,42 @@ ApplicationInstance.prototype.handleRunAlgorithm = function() {
 ApplicationInstance.prototype.runAlgorithm = async function () {
     this.init();
 
-    //JS
-    let result = this.runner.runJSAlgorithm();
-
-    //PHP
-    //let result = await this.runPhpAlgorithm(false);
-
-    //C#
-    //let result = await this.runCSharpAlgorithm();
-
     let timeJS;
     let timeCSharp
     let timePHP;
 
     if(!this.simulationMode) {
         timeJS = this.runner.benchmarkJSAlgorithm();
-        try {
-            var res = await this.runner.runCSharpAlgorithm();
-            timeCSharp = res.ms;
+        let allow = true;
+        if(timeJS > 1000) {
+            alert(`JavaScript took ${timeJS} ms. Estimated time for PHP and C# is ${timeJS * 400} ms. Skipping PHP and C# tests.`)
+            allow = false;
         }
-        catch(e) {
-            console.error("error running C# code", e)
-        }
-        try {
-            var res = await this.runner.runPhpAlgorithm();
-            timePHP = res.ms;
-        }
-        catch(e) {
-            console.error("error running php code", e)
+
+        if(allow) {
+            try {
+                var res = await this.runner.runCSharpAlgorithm();
+                timeCSharp = res.ms;
+            }
+            catch(e) {
+                console.error("error running C# code", e)
+            }
+            try {
+                var res = await this.runner.runPhpAlgorithm();
+                timePHP = res.ms;
+            }
+            catch(e) {
+                console.error("error running php code", e)
+            }
         }
     }
+
+    //JS
+    let result = this.runner.runJSAlgorithm();
+    //PHP
+    //let result = await this.runner.runPhpAlgorithm(false);
+    //C#
+    //let result = await this.runner.runCSharpAlgorithm();
 
     this.probes = result.probes;
     this.paths = result.paths;
