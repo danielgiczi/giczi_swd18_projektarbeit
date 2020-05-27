@@ -71,6 +71,7 @@ Interface.prototype.addMapToSelection = function (inx, title) {
 
 Interface.prototype.handleMapChanged = function (handler) {
     $("#maps select").change(function () {
+        document.activeElement.blur()
         handler($(this).val());
     })
 }
@@ -91,8 +92,9 @@ Interface.prototype.setSelectedAlgorithm = function(val) {
     $("#algorithms select").val(val);
 }
 
-Interface.prototype.handleAlgorithmChanged = function(handler) {
+Interface.prototype.handleAlgorithmChanged = function(handler) {    
     $("#algorithms select").change(function () {
+        document.activeElement.blur()
         handler($(this).val());
     })
 }

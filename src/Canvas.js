@@ -15,6 +15,7 @@ function Canvas(sk, imgSize, setDest) {
     this.highlightX = -1;
     this.highlightY = -1;
     this.setDest = setDest;
+    this.id;
 }
 
 Canvas.prototype.preload = function () {
@@ -31,20 +32,41 @@ Canvas.prototype.preload = function () {
 }
 
 Canvas.prototype.setup = function (map, simulationMode) {
+    if(!!this.id) {
+        if(this.pg) {
+            this.pg.remove();
+        }
+        document.getElementById(this.id).remove();
+    }
+
     this.map = map;
     let canvasWidth = map.getWidth() * this.imgSize;
     this.width = canvasWidth
     let canvasHeight = map.getHeight() * this.imgSize;
     this.height = canvasHeight
+    
+    let container = document.getElementById("canvas-container")
+    let thisWrapper = document.createElement("DIV");
+    this.id = new Date().getTime();
+    thisWrapper.id = this.id;
+    thisWrapper.className="wrapper";
+    container.appendChild(thisWrapper);
 
-    var topCoords = document.getElementById("top-coords")
-    topCoords.innerHTML = "";
-    var rightCoords = document.getElementById("right-coords")
-    rightCoords.innerHTML = ""
-    var bottomCoords = document.getElementById("bottom-coords")
-    bottomCoords.innerHTML = "";
-    var leftCoords = document.getElementById("left-coords")
-    leftCoords.innerHTML = "";
+    var topCoords = document.createElement("DIV");
+    topCoords.className="top-coords coords";
+    thisWrapper.appendChild(topCoords);
+
+    var rightCoords = document.createElement("DIV")
+    rightCoords.className="right-coords coords";
+    thisWrapper.appendChild(rightCoords);
+
+    var bottomCoords = document.createElement("DIV")
+    bottomCoords.className="bottom-coords coords";
+    thisWrapper.appendChild(bottomCoords);
+
+    var leftCoords = document.createElement("DIV")
+    leftCoords.className="left-coords coords";
+    thisWrapper.appendChild(leftCoords);
 
     for (let x = 0; x < map.getHeight(); x++) {
         var thisCoord = document.createElement("div")
@@ -63,7 +85,7 @@ Canvas.prototype.setup = function (map, simulationMode) {
     var canvas = this.sk.createCanvas(canvasWidth, canvasHeight);
     this.pg = this.sk.createGraphics(canvasWidth, canvasHeight);
 
-    canvas.parent('wrapper');
+    canvas.parent(thisWrapper.id);
 
     this.sk.background("#eee");
 
@@ -123,7 +145,7 @@ Canvas.prototype.draw = function (simulationMode, gameFinished, destX, destY, pr
 
 Canvas.prototype.renderStart = function (x,y) {
     this.sk.fill("red");
-    this.sk.circle(x, y, 24)
+    this.sk.circle(x, y, this.imgSize - 6);
 }
 
 Canvas.prototype.mouseOver = function () {
@@ -145,7 +167,7 @@ Canvas.prototype.renderDestination = function (destX, destY) {
     this.sk.fill("green")
     this.sk.circle(
         this.coordToCenteredPosition(destX),
-        this.coordToCenteredPosition(destY), 24)
+        this.coordToCenteredPosition(destY), this.imgSize - 6)
 }
 
 let probeIndex = 0;
@@ -153,8 +175,7 @@ Canvas.prototype.drawProbes = function (probes, paths) {
     this.sk.stroke("#eee");
     this.sk.strokeWeight(2);
 
-    for (let index = 0; index < probes.length; index++) {
-        if (index == probeIndex) break;
+    for (let index = 0; index < probes.length; index++) {        
         let probe = probes[index];
         if (paths.length == 0 && probeIndex >= probes.length) {
             this.sk.fill("red")
@@ -166,12 +187,13 @@ Canvas.prototype.drawProbes = function (probes, paths) {
         this.sk.rect(
             this.coordToPosition(probe.x),
             this.coordToPosition(probe.y), this.imgSize)
+        if (index == probeIndex) break;
     }
 
     this.sk.stroke("#000");
     this.sk.strokeWeight(1)
 
-    probeIndex += 5// Math.round(probes.length / 100);
+    probeIndex += 5;
     if (probeIndex > probes.length) {
         probeIndex = probes.length;
     }

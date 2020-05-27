@@ -9,7 +9,7 @@ import DepthFirstSearchAlgorithm from "./DepthFirstSearchAlgorithm";
 
 function ApplicationInstance(sk) {
     this.Interface = new Interface();
-    this.Canvas = new Canvas(sk, 28, this.destinationSet.bind(this));
+    this.Canvas = new Canvas(sk, 26, this.destinationSet.bind(this));
 
     //Props
     this.selectedMapIndex = 0;
@@ -29,7 +29,7 @@ function ApplicationInstance(sk) {
     this.Interface.handleResetSimulation(this.resetSimulation.bind(this));
     this.Interface.handleMapChanged(this.mapChanged.bind(this));
     this.Interface.handleAlgorithmChanged(this.algorithmChanged.bind(this));
-    this.Interface.handleRunAlgorithm(this.runAlgorithm.bind(this));
+    this.Interface.handleRunAlgorithm(this.handleRunAlgorithm.bind(this));
 
     let self = this
     maps.forEach(function (map, inx) {
@@ -44,6 +44,8 @@ ApplicationInstance.prototype.init = function () {
     //Props
     this.algorithm = null;
     this.gameFinished = false;
+
+    this.running = false;
 
     this.probes = [];
     this.paths = []
@@ -160,6 +162,16 @@ ApplicationInstance.prototype.runPhpAlgorithm = function () {
     })   
 }
 
+ApplicationInstance.prototype.handleRunAlgorithm = function() {
+    if(this.running) return;
+
+    if(!this.simulationMode) return;
+
+    this.running = true;
+    this.runAlgorithm();
+    this.running = false;
+}
+
 ApplicationInstance.prototype.runAlgorithm = async function () {
     this.init();
 
@@ -167,6 +179,7 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
     //JS
     result = this.algorithm.run();
+    //console.log(result);
     //console.log(result);
     //PHP
     //result = await this.runPhpAlgorithm(false);
@@ -210,7 +223,6 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
     let html = "";
 
     if(!this.simulationMode) {
-        html += `<span class='coords'>(${this.destX},${this.destY})</span>`
         html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(timeJS)} ms</span></div>`
 
         let php = "";
@@ -238,6 +250,7 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 }
 
 function FormatMedian(input) {
+    if(input == null) return "";
     if(input > 10) {
         return input.toFixed(2);
     }
