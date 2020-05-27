@@ -1,11 +1,7 @@
 import maps from "./Maps";
-import AStarAlgorithm from "./AStarAlgorithm"
-import DjikstraAlgorithm from './DjikstraAlgorithm';
-import BreadthFirstSearchAlgorithm from './BreadthFirstSearchAlgorithm';
 import Map from "./Map"
 import Interface from "./Interface"
 import Canvas from "./Canvas"
-import DepthFirstSearchAlgorithm from "./DepthFirstSearchAlgorithm";
 import AlgorithmRunner from "./AlgorithmRunner";
 
 function ApplicationInstance(sk) {
@@ -43,8 +39,6 @@ function ApplicationInstance(sk) {
 }
 
 ApplicationInstance.prototype.init = function () {
-    //Props
-    this.algorithm = null;
     this.gameFinished = false;
 
     this.running = false;
@@ -58,33 +52,6 @@ ApplicationInstance.prototype.init = function () {
     this.gameX = -1;
     this.gameY = -1;
     this.gameMoveInx = 0;
-
-    let algDestX;
-    let algDestY;
-
-    if (this.simulationMode) {
-        algDestX = this.map.destX;
-        algDestY = this.map.destY;
-    }
-    else {
-        algDestX = this.destX;
-        algDestY = this.destY;
-    }
-
-    switch (Number(this.selectedAlgorithmIndex)) {
-        case 0:
-            this.algorithm = new AStarAlgorithm(this.map.startX, this.map.startY, algDestX, algDestY, this.map);
-            break;
-        case 1:
-            this.algorithm = new DjikstraAlgorithm(this.map.startX, this.map.startY, algDestX, algDestY, this.map);
-            break;
-        case 2:
-            this.algorithm = new BreadthFirstSearchAlgorithm(this.map.startX, this.map.startY, algDestX, algDestY, this.map);
-            break;
-        case 3:
-            this.algorithm = new DepthFirstSearchAlgorithm(this.map.startX, this.map.startY, algDestX, algDestY, this.map);
-            break;
-    }
 
     this.Interface.refreshControls(this.simulationMode);
 
@@ -104,25 +71,21 @@ ApplicationInstance.prototype.handleRunAlgorithm = function() {
 ApplicationInstance.prototype.runAlgorithm = async function () {
     this.init();
 
-    let result;
-
     //JS
-    result = this.algorithm.run();
-    //console.log(result);
-    //console.log(result);
+    let result = this.runner.runJSAlgorithm();
+
     //PHP
-    //result = await this.runPhpAlgorithm(false);
-    //console.log(result);
+    //let result = await this.runPhpAlgorithm(false);
 
     //C#
-    //result = await this.runCSharpAlgorithm();
+    //let result = await this.runCSharpAlgorithm();
 
     let timeJS;
     let timeCSharp
     let timePHP;
 
     if(!this.simulationMode) {
-        timeJS = this.runner.benchmarkJSAlgorithm()
+        timeJS = this.runner.benchmarkJSAlgorithm();
         try {
             var res = await this.runner.runCSharpAlgorithm();
             timeCSharp = res.ms;
@@ -172,7 +135,6 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
             csharp = FormatMedian(timeCSharp)  + " ms";
         }
         html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${csharp}</span></div>`
-
     }
 
     $("#controls .game-controls .results").html(html);
