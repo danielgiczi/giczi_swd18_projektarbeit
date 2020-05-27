@@ -27,6 +27,7 @@ BreadthFirstSearchAlgorithm.prototype.run = function () {
         for(var adjacentNodeIndex = 0; adjacentNodeIndex < adjacentNodes.length; adjacentNodeIndex++)
         {
             var C = adjacentNodes[adjacentNodeIndex];
+            this.probes.push({x: C.x, y:C.y})
 
             if(C.equals(this.G)) {
                 var node = C;
@@ -42,7 +43,6 @@ BreadthFirstSearchAlgorithm.prototype.run = function () {
 
             this.visited.push(C);
             this.queue.push(C);
-            this.probes.push({x: C.x, y:C.y})
         }
     }
 
