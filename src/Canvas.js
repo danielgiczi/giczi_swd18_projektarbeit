@@ -129,7 +129,7 @@ Canvas.prototype.draw = function (simulationMode, gameFinished, destX, destY, pr
     this.mouseOver();
 
     if(gameFinished) {
-        probeIndex = probes.length - 1
+        probeIndex = probes.length 
     }
     this.drawProbes(probes, paths);
     this.drawCalculated(paths, probes);
