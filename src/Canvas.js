@@ -76,7 +76,6 @@ Canvas.prototype.setup = function (map, simulationMode) {
             let imgToDraw;
             switch (Math.abs(val)) {
                 case 0: imgToDraw = self.imgTile; break;
-                //case 0: imgToDraw = self.imgTileAlt; break; //doch nicht, schaut nicht schön aus, zu viele 1er
                 case 5: imgToDraw = self.imgM5; break;
                 case 8: imgToDraw = self.imgWall; break;
             }
