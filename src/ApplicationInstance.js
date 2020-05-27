@@ -105,54 +105,17 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
     this.probes = result.probes;
     this.paths = result.paths;
     
-    $("#controls .game-controls").addClass("finish");
     if(!this.simulationMode) {
         this.gameFinished = true;
         this.gameX = this.Canvas.coordToCenteredPosition(this.map.startX);
         this.gameY  = this.Canvas.coordToCenteredPosition(this.map.startY);
     }
 
-    let html = "";
-
-    if(!this.simulationMode) {
-        html += `<div class='result'><span class='lang'>JS</span><span class='time'>${FormatMedian(timeJS)} ms</span></div>`
-
-        let php = "";
-        if(timePHP == null) {
-            php = "Fehler";
-        }
-        else {
-            php = FormatMedian(timePHP) + " ms";
-        }
-        
-        html += `<div class='result'><span class='lang'>PHP</span><span class='time'>${php}</span></div>`
-
-        let csharp = "";
-        if(timeCSharp == null) {
-            csharp = "Fehler";
-        }
-        else{
-            csharp = FormatMedian(timeCSharp)  + " ms";
-        }
-        html += `<div class='result'><span class='lang'>C# WASM</span><span class='time'>${csharp}</span></div>`
-    }
-
-    $("#controls .game-controls .results").html(html);
-}
-
-function FormatMedian(input) {
-    if(input == null) return "";
-    if(input > 10) {
-        return input.toFixed(2);
-    }
-    else {
-        return input.toFixed(6);
-    }
+    this.Interface.renderBenchmarkResult(this.simulationMode, timeJS, timePHP, timeCSharp)
 }
 
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {
-    if(this.simulationMode) return;
-    if (this.gameFinished) {
+    if (this.gameFinished || this.simulationMode) {
         return;
     }
 
