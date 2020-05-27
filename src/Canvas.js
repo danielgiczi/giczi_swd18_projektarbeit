@@ -1,12 +1,6 @@
 function Canvas(sk, imgSize, setDest) {
-    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
-
     this.sk = sk;
-    this.imgTile;
-    this.imgTileAlt;
-    this.imgWall;
     this.imgSize = imgSize;
-    this.imgWeight;
     this.map;
     this.pg;
     this.width;
@@ -16,19 +10,6 @@ function Canvas(sk, imgSize, setDest) {
     this.highlightY = -1;
     this.setDest = setDest;
     this.id;
-}
-
-Canvas.prototype.preload = function () {
-    if (this.imgSize < 32) {
-        this.imgTile = this.sk.loadImage("public/tiles/tilemap_v1_11.png")
-    }
-    else {
-        this.imgTile = this.sk.loadImage("public/tiles/tilemap_v1_09.png")
-    }
-    this.imgTileAlt = this.sk.loadImage("public/tiles/tilemap_v1_12.png");
-
-    this.imgWall = this.sk.loadImage("public/tiles/tilemap_v1_10.png")
-    this.imgM5 = this.sk.loadImage("public/tiles/tilemap_v1_05.png")
 }
 
 Canvas.prototype.setup = function (map, simulationMode) {
@@ -97,9 +78,9 @@ Canvas.prototype.setup = function (map, simulationMode) {
         row.forEach((val) => {
             let imgToDraw;
             switch (Math.abs(val)) {
-                case 0: imgToDraw = self.imgTile; break;
-                case 5: imgToDraw = self.imgM5; break;
-                case 8: imgToDraw = self.imgWall; break;
+                case 0: imgToDraw = window.imgTile; break;
+                case 5: imgToDraw = window.imgM5; break;
+                case 8: imgToDraw = window.imgWall; break;
             }
 
             self.pg.image(imgToDraw, currX, currY, self.imgSize, self.imgSize)
@@ -126,7 +107,8 @@ Canvas.prototype.draw = function (simulationMode, gameFinished, destX, destY, pr
     this.sk.clear();
     this.sk.image(this.pg, 0, 0, this.width, this.height);
 
-    this.mouseOver();
+    this.highlightX = this.mouseCoordToCenteredPosition(this.sk.mouseX)
+    this.highlightY = this.mouseCoordToCenteredPosition(this.sk.mouseY)
 
     if(gameFinished) {
         probeIndex = probes.length 
@@ -140,17 +122,8 @@ Canvas.prototype.draw = function (simulationMode, gameFinished, destX, destY, pr
 
     this.renderDestination(destX, destY);
 
-    this.renderStart(startX, startY);
-}
-
-Canvas.prototype.renderStart = function (x,y) {
     this.sk.fill("red");
-    this.sk.circle(x, y, this.imgSize - 6);
-}
-
-Canvas.prototype.mouseOver = function () {
-    this.highlightX = this.mouseCoordToCenteredPosition(this.sk.mouseX)
-    this.highlightY = this.mouseCoordToCenteredPosition(this.sk.mouseY)
+    this.sk.circle(startX, startY, this.imgSize - 6);
 }
 
 Canvas.prototype.renderHighlight = function () {

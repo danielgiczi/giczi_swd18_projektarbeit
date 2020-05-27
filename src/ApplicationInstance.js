@@ -6,8 +6,11 @@ import AlgorithmRunner from "./AlgorithmRunner";
 
 function ApplicationInstance(sk) {
     this.Interface = new Interface();
-    this.Canvas = new Canvas(sk, 26, this.destinationSet.bind(this));
     this.runner = new AlgorithmRunner(this)
+
+    let imgSize = 26;
+    document.documentElement.style.setProperty('--tile-size', imgSize + "px");
+    this.Canvas = new Canvas(sk, imgSize, this.destinationSet.bind(this));
 
     //Props
     this.selectedMapIndex = 0;
@@ -159,10 +162,6 @@ ApplicationInstance.prototype.algorithmChanged = function (index) {
 
     this.selectedAlgorithmIndex = index;
     this.init();
-}
-
-ApplicationInstance.prototype.preload = function () {
-    this.Canvas.preload();
 }
 
 ApplicationInstance.prototype.setup = function () {
