@@ -6,10 +6,12 @@ import Map from "./Map"
 import Interface from "./Interface"
 import Canvas from "./Canvas"
 import DepthFirstSearchAlgorithm from "./DepthFirstSearchAlgorithm";
+import AlgorithmRunner from "./AlgorithmRunner";
 
 function ApplicationInstance(sk) {
     this.Interface = new Interface();
     this.Canvas = new Canvas(sk, 26, this.destinationSet.bind(this));
+    this.runner = new AlgorithmRunner(this)
 
     //Props
     this.selectedMapIndex = 0;
@@ -89,79 +91,6 @@ ApplicationInstance.prototype.init = function () {
     this.Canvas.setup(this.map);
 }
 
-ApplicationInstance.prototype.runCSharpAlgorithm = function () {
-    let algDestX;
-    let algDestY;
-
-    if (this.simulationMode) {
-        algDestX = this.map.destX;
-        algDestY = this.map.destY;
-    }
-    else {
-        algDestX = this.destX;
-        algDestY = this.destY;
-    }
-    let mapData = maps[this.Interface.getSelectedMap()].data;
-    return window.invokeCSharpAlgorithm(Number(this.selectedAlgorithmIndex), Number(this.map.startX), Number(this.map.startY), Number(algDestX), Number(algDestY), mapData)
-}
-
-ApplicationInstance.prototype.benchmarkJSAlgorithm = function() {
-    let times = [];
-
-    let iterationBaseCount = 1000;
-    if(this.selectedAlgorithmIndex == 1) iterationBaseCount = iterationBaseCount / 20;
-
-    for(let inx = 0; inx < iterationBaseCount; inx++) {
-        let startTime = performance.now();
-        this.algorithm.run();
-        let finishTime = performance.now();
-        let executionTime = finishTime - startTime
-        times.push(executionTime)
-    }        
-    times = times.sort((a,b) => a - b);
-    let median = times[Math.round(times.length/2,0)]
-
-    return median;
-}
-
-ApplicationInstance.prototype.runPhpAlgorithm = function () {
-    let algDestX;
-    let algDestY;
-
-    if (this.simulationMode) {
-        algDestX = this.map.destX;
-        algDestY = this.map.destY;
-    }
-    else {
-        algDestX = this.destX;
-        algDestY = this.destY;
-    }
-
-    let mapData = maps[this.Interface.getSelectedMap()].data;
-
-    let live = document.location.href.indexOf("heroku") > -1;
-
-    let url = "http://localhost/giczi_swd18_projektarbeit_php/api.php";
-    if(live) {
-        url = "https://giczi-swd18-projektarbeit-php.herokuapp.com/api.php";
-    }
-
-    return $.ajax({        
-        url: url,
-        type: "POST",
-        contentType:"application/json; charset=utf-8",
-        dataType:"json",
-        data: JSON.stringify({
-            AlgorithmIndex: Number(this.selectedAlgorithmIndex),
-            StartX: this.map.startX,
-            StartY: this.map.startY,
-            DestX:  Number(algDestX),
-            DestY: Number(algDestY),
-            MapData: mapData
-        })
-    })   
-}
-
 ApplicationInstance.prototype.handleRunAlgorithm = function() {
     if(this.running) return;
 
@@ -193,16 +122,16 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
     let timePHP;
 
     if(!this.simulationMode) {
-        timeJS = this.benchmarkJSAlgorithm()
+        timeJS = this.runner.benchmarkJSAlgorithm()
         try {
-            var res = await this.runCSharpAlgorithm();
+            var res = await this.runner.runCSharpAlgorithm();
             timeCSharp = res.ms;
         }
         catch(e) {
             console.error("error running C# code", e)
         }
         try {
-            var res = await this.runPhpAlgorithm();
+            var res = await this.runner.runPhpAlgorithm();
             timePHP = res.ms;
         }
         catch(e) {
