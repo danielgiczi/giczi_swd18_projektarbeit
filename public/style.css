@@ -21,6 +21,11 @@ body {
 #app{
   min-height: 100vh;
   display: flex;
+  padding-bottom: 35px;
+}
+
+.comparison #app {
+  padding-bottom: 0;
 }
 
 #canvas-container {
@@ -149,9 +154,9 @@ body {
 }
 
 #size{
-  top:10%;
+  right: 0;
+  bottom: 140px;
   position: fixed;
-  left:50%;
   transform: translateX(-50%);
   color:#666;
 }
@@ -384,6 +389,39 @@ body {
   font-size: .75rem;
 }
 
+.selectbox button{
+  padding:1.8rem 1rem 1.3rem 1rem;
+  font-size: 1rem;
+  background: #aaa;
+  border:1px solid #aea8a8;
+  display: block;
+  min-width: 180px;
+}
+
+body.comparison-container .comparison-button.start {
+  display:none;
+}
+
+body.comparison-container #comparison{
+  position:fixed;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  margin-left: 100px;
+}
+
+body.comparison-container #maps{
+  position:fixed;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  margin-left: -100px;
+}
+
+body:not(.comparison-container) .comparison-button.stop {
+  display:none;
+}
+
 #maps:before{
   content:'Choose a map';
 }
@@ -512,4 +550,93 @@ html.meta-show-info #overlay:before{
 
 html.meta-show-info #info {
   display: block;
+}
+
+.comparison #info-control,
+.comparison #controls,
+.comparison #credits,
+.comparison #toggle-mode,
+.comparison #maps,
+.comparison #comparison,
+.comparison .coords,
+.comparison #size {
+  display:none;
+}
+
+.comparison #algorithms:before {
+  content: 'Algorithm';
+}
+.comparison .algorithms-select {
+  -webkit-appearance: none;
+  pointer-events: none;
+}
+
+
+.comparison .selectbox{
+  margin:0;
+}
+
+.comparison.v1 .selectbox-wrapper {
+  transform: none;
+  left:0;
+}
+.comparison.v2 .selectbox-wrapper {
+  transform: none;
+  left:auto;
+  right:0;
+}
+.comparison.v3 .selectbox-wrapper {
+  transform: none;
+  left:0;
+  top:auto;
+  bottom:0;  
+}
+.comparison.v4 .selectbox-wrapper {
+  transform: none;
+  left:auto;
+  right:0;
+  top:auto;
+  bottom:0;
+}
+
+.comparison-container #app{
+  padding-bottom: 136px;  
+  display:grid;
+  grid-template-columns:  1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: 'v1 v2'
+                      'v3 v4';
+}
+
+#parent-overlay {
+  position: fixed;
+  top:0;
+  bottom:136px;
+  left:0;
+  right:0;
+}
+
+.comparison-container .view:nth-of-type(1) {
+  grid-area: v1;
+  border-right:2px solid #aaa;
+  border-bottom:2px solid #aaa;
+}
+.comparison-container .view:nth-of-type(2) {
+  grid-area: v2;
+  border-left:2px solid #aaa;
+  border-bottom:2px solid #aaa;
+}
+.comparison-container .view:nth-of-type(3) {
+  grid-area: v3;
+  border-right:2px solid #aaa;
+  border-top:2px solid #aaa;
+}
+.comparison-container .view:nth-of-type(4) {
+  grid-area: v4;
+  border-left:2px solid #aaa;
+  border-top:2px solid #aaa;
+}
+
+.comparison-container #controls .simulation-controls {
+  display:block;
 }

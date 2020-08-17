@@ -9,6 +9,10 @@ function Interface() {
             $("html").removeClass("meta-show-info");        
         })
     })
+
+    $("#comparison .comparison-button.start").click(function () {
+        document.location = document.location + "?comparison=true"
+    })
  }
 
 Interface.prototype.handleToggleSimulationMode = function (handler) {
@@ -138,6 +142,11 @@ function FormatMedian(input) {
     else {
         return input.toFixed(6);
     }
+}
+
+Interface.prototype.setupComparison = function(comparisonView) {
+    $("body").addClass(`comparison v${comparisonView}`);
+    this.comparison = true;
 }
 
 export default Interface;

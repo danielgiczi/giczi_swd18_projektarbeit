@@ -4,7 +4,7 @@ import Interface from "./Interface"
 import Canvas from "./Canvas"
 import AlgorithmRunner from "./AlgorithmRunner";
 
-function ApplicationInstance(sk) {
+function ApplicationInstance(sk, comparisonAlgorithm, comparisonView) {
     this.Interface = new Interface();
     this.runner = new AlgorithmRunner(this)
     
@@ -13,6 +13,14 @@ function ApplicationInstance(sk) {
     //Props
     this.selectedMapIndex = 0;
     this.selectedAlgorithmIndex = 2;
+    this.comparison = false;
+
+    if(comparisonAlgorithm > -1) {
+        this.selectedAlgorithmIndex = comparisonAlgorithm;
+        this.Interface.setupComparison(comparisonView);
+        this.comparison = true;
+    }
+
     this.simulationMode = true;
     this.gameFinished = false;
     this.destX = -1;
@@ -23,12 +31,29 @@ function ApplicationInstance(sk) {
     this.gameMoveInx = 0;
 
     //Events
-    this.Interface.handleToggleSimulationMode(this.toggleSimulationMode.bind(this));
-    this.Interface.handleResetGame(this.resetGame.bind(this));
-    this.Interface.handleResetSimulation(this.resetSimulation.bind(this));
-    this.Interface.handleMapChanged(this.mapChanged.bind(this));
-    this.Interface.handleAlgorithmChanged(this.algorithmChanged.bind(this));
-    this.Interface.handleRunAlgorithm(this.handleRunAlgorithm.bind(this));
+    if(!this.comparison) {
+        this.Interface.handleToggleSimulationMode(this.toggleSimulationMode.bind(this));
+        this.Interface.handleResetGame(this.resetGame.bind(this));
+        this.Interface.handleResetSimulation(this.resetSimulation.bind(this));
+        this.Interface.handleMapChanged(this.mapChanged.bind(this));
+        this.Interface.handleAlgorithmChanged(this.algorithmChanged.bind(this));
+        this.Interface.handleRunAlgorithm(this.handleRunAlgorithm.bind(this));
+    }
+    else {
+        let that = this;
+        window.addEventListener("message", function(e) {
+            if(e.data =="start-simulation") {
+                that.handleRunAlgorithm();
+            }
+            else if(e.data =="reset-simulation") {
+                that.resetSimulation();
+            }
+            else if(e.data.indexOf("map-changed") > -1) {
+                let mapInx = e.data.split("=")[1]
+                that.mapChanged(mapInx);
+            }
+        }, false);
+    }    
 
     let self = this
     maps.forEach(function (map, inx) {
@@ -47,9 +72,22 @@ ApplicationInstance.prototype.init = function () {
     this.probes = [];
     this.paths = []
 
-    let mapData = maps[this.Interface.getSelectedMap()];
-    let imgSize = mapData.imgSize || 24;
+    let mapData = maps[this.selectedMapIndex];
+
     this.map = new Map(mapData.data);
+
+    let imgSize;
+    
+    if(this.comparison) {
+        imgSize = (window.innerHeight * 0.9) / this.map.getHeight()
+    }
+    else {
+        imgSize = (window.innerHeight * 0.6) / this.map.getHeight()
+    }
+
+    if(imgSize > 24) {
+        imgSize = 24;
+    }
 
     this.gameX = -1;
     this.gameY = -1;
@@ -131,8 +169,6 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 }
 
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {
-    console.log("click")
-
     if (this.gameFinished || this.simulationMode) {
         return;
     }
@@ -167,6 +203,10 @@ ApplicationInstance.prototype.mapChanged = function (index) {
     }
     this.selectedMapIndex = index;
     this.init();
+}
+
+ApplicationInstance.prototype.handleComparison = function() {
+
 }
 
 ApplicationInstance.prototype.algorithmChanged = function (index) {
