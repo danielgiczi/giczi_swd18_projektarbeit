@@ -65,7 +65,6 @@ ApplicationInstance.prototype.init = function () {
     })
 
     this.Canvas = new Canvas(this.sk, imgSize, this.destinationSet.bind(this));
-
     this.Canvas.setup(this.map);
 }
 
@@ -91,7 +90,7 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
         let allow = true;
         if(timeJS > 1000) {
             alert(`JavaScript took ${timeJS} ms. Estimated time for PHP and C# is ${timeJS * 400} ms. Skipping PHP and C# tests.`)
-            allow = false;
+           // allow = false;
         }
 
         if(allow) {
@@ -132,6 +131,8 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 }
 
 ApplicationInstance.prototype.destinationSet = function(destX, destY) {
+    console.log("click")
+
     if (this.gameFinished || this.simulationMode) {
         return;
     }

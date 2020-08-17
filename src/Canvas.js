@@ -77,7 +77,7 @@ Canvas.prototype.setup = function (map, simulationMode) {
     let span = document.createElement("SPAN");
     span.innerHTML = map.getWidth() + " x " + map.getHeight();
     size.appendChild(span);
-    container.appendChild(size);
+    document.getElementById("app").appendChild(size);
 
     var canvas = this.sk.createCanvas(canvasWidth, canvasHeight);
     this.pg = this.sk.createGraphics(canvasWidth, canvasHeight);
