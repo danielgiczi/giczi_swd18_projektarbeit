@@ -133,7 +133,6 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
         if(allow) {
             try {
                 var res = await this.runner.runCSharpAlgorithm();
-                //console.log(res);
                 timeCSharp = res.ms;
             }
             catch(e) {
