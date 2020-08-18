@@ -128,20 +128,20 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
         let allow = true;
         if(timeJS > 1000) {
             alert(`JavaScript took ${timeJS} ms. Estimated time for PHP and C# is ${timeJS * 400} ms. Skipping PHP and C# tests.`)
-           // allow = false;
         }
 
         if(allow) {
             try {
-                //var res = await this.runner.runCSharpAlgorithm();
-                //timeCSharp = res.ms;
+                var res = await this.runner.runCSharpAlgorithm();
+                //console.log(res);
+                timeCSharp = res.ms;
             }
             catch(e) {
                 console.error("error running C# code", e)
             }
             try {
-                //var res = await this.runner.runPhpAlgorithm();
-                //timePHP = res.ms;
+                var res = await this.runner.runPhpAlgorithm();
+                timePHP = res.ms;
             }
             catch(e) {
                 console.error("error running php code", e)
