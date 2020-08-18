@@ -17,7 +17,7 @@ function Canvas(sk, imgSize, setDest) {
     }
 }
 
-Canvas.prototype.setup = function (map, simulationMode) {
+Canvas.prototype.setup = function (map, simulationMode, comparisonMode) {
     if(!!this.id) {
         if(this.pg) {
             this.pg.remove();
@@ -88,13 +88,28 @@ Canvas.prototype.setup = function (map, simulationMode) {
 
     let currX = 0;
     let currY = 0;
-    let self = this;
-    map.forEach((row) => {
+    let self = this;    
+    map.forEach((row, rowInx) => {
         currX = 0;
-        row.forEach((val) => {
+        row.forEach((val, colInx) => {
             let imgToDraw;
             switch (Math.abs(val)) {
-                case 0: imgToDraw = window.imgTile; break;
+                case 0:
+                    if(comparisonMode) {
+                        imgToDraw = window.imgTileThick; 
+                    }   
+                    else if(map.getWidth() > 50) {
+                        if((colInx + rowInx) % 2 == 0) {
+                            imgToDraw = imgTileGray
+                        }                        
+                        else {
+                            imgToDraw = imgTileWhite
+                        }                         
+                    }
+                    else {
+                        imgToDraw = window.imgTile; 
+                    } 
+                break;
                 case 5: imgToDraw = window.imgM5; break;
                 case 8: imgToDraw = window.imgWall; break;
             }

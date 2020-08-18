@@ -103,7 +103,7 @@ ApplicationInstance.prototype.init = function () {
     })
 
     this.Canvas = new Canvas(this.sk, imgSize, this.destinationSet.bind(this));
-    this.Canvas.setup(this.map);
+    this.Canvas.setup(this.map,null, this.comparison);
 }
 
 ApplicationInstance.prototype.handleRunAlgorithm = function() {
@@ -133,15 +133,15 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
         if(allow) {
             try {
-                var res = await this.runner.runCSharpAlgorithm();
-                timeCSharp = res.ms;
+                //var res = await this.runner.runCSharpAlgorithm();
+                //timeCSharp = res.ms;
             }
             catch(e) {
                 console.error("error running C# code", e)
             }
             try {
-                var res = await this.runner.runPhpAlgorithm();
-                timePHP = res.ms;
+                //var res = await this.runner.runPhpAlgorithm();
+                //timePHP = res.ms;
             }
             catch(e) {
                 console.error("error running php code", e)

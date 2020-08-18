@@ -23,12 +23,10 @@ $(document).ready(function () {
     new p5((sk) => {
       let app = new ApplicationInstance(sk, comparisonAlgorithm, comparisonView);
       sk.preload = () => {
-        if(comparisonAlgorithm > -1) {
-          window.imgTile = sk.loadImage("public/tiles/tilemap_v1_13.png")
-        }
-        else {
-          window.imgTile = sk.loadImage("public/tiles/tilemap_v1_11.png")
-        }
+        window.imgTileThick = sk.loadImage("public/tiles/tilemap_v1_13.png")
+        window.imgTileGray = sk.loadImage("public/tiles/tilemap_v1_14.png")
+        window.imgTileWhite = sk.loadImage("public/tiles/tilemap_v1_09.png")
+        window.imgTile = sk.loadImage("public/tiles/tilemap_v1_11.png")
         window.imgWall = sk.loadImage("public/tiles/tilemap_v1_10.png")
         window.imgM5 = sk.loadImage("public/tiles/tilemap_v1_05.png")
       }

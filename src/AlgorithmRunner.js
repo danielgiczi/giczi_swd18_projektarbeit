@@ -59,7 +59,6 @@ AlgorithmRunner.prototype.initJsAlgorithm = function() {
 AlgorithmRunner.prototype.runJSAlgorithm = function() {
     this.initJsAlgorithm();
     let res = this.algorithm.run();
-    //console.log(res);
     return res;
 }
 
@@ -77,7 +76,7 @@ AlgorithmRunner.prototype.benchmarkJSAlgorithm = function() {
         this.algorithm.run();
         let finishTime = performance.now();
         let executionTime = finishTime - startTime
-        if(executionTime > 0.1) {
+        if(executionTime > 10) {
             iterationBaseCount = 3;
         }
         times.push(executionTime)
