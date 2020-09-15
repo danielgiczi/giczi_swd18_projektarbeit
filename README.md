@@ -20,3 +20,5 @@ C#-Projekt
 Das Archiv 'giczi_swd18_projektarbeit_csharp.zip' enthält das C#-Projekt.
 Zur Kompilierung ist mindestens eine Visual Studio 2019 Community Version benötigt.
 Zusätzlich muss die .NET Core SDK installiert werden: https://dotnet.microsoft.com/download (.NET Core 3.1 Build Apps -> Download .NET Core SDK)
+
+Die Korrektheit der Installationen kann damit überprüft werden, dass man einen Test im Benchmark-Modus durchführt. Wenn es Messwerte zu allen Skriptsprachen (JS,PHP und C# Wasm) gibt, dann ist alles in Ordnung.
