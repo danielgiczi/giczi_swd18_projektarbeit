@@ -7,7 +7,6 @@ function AStarAlgorithm(startX, startY, goalX, goalY, map) {
     this.calculateCostsForNode(this.P);
 }
 
-//Page 108 AI Programmin wisdom Manhattan Distance
 AStarAlgorithm.prototype.getCostFromStartToNode = function (node) {
     return Math.abs(this.G.x - node.x) + Math.abs(this.G.y - node.y);
 }
@@ -72,13 +71,11 @@ AStarAlgorithm.prototype.run = function () {
             }
             else if (openListContains.contains) {
                 if (C.f >= openListContains.node.f) {
-                    //console.log("skip");
                     continue;
                 }
             }
             else if (closedListContains.contains) {
                 if (C.f >= closedListContains.node.f) {
-                    //console.log("skip");
                     continue;
                 }
                 else {

@@ -18,7 +18,6 @@ $(document).ready(function () {
     }
     else {
       $.getScript("/_framework/blazor.webassembly.js");
-      $.getScript("/_framework/wasm/dotnet.3.2.0.js");
     }
     new p5((sk) => {
       let app = new ApplicationInstance(sk, comparisonAlgorithm, comparisonView);

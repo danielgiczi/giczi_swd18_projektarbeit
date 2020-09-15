@@ -150,6 +150,11 @@ ApplicationInstance.prototype.runAlgorithm = async function () {
 
     //JS
     let result = this.runner.runJSAlgorithm();
+
+    // Um im Simulationsmodus an ein schnelles Ergebnis zu kommen, werden die Berechnungen in JavaScript ausgeführt.
+    // Während der Implementierung der Anwendung können aber die Zeilen unterhalb einkommentiert werden, um sicherzustellen, dass es keine Unterschiede
+    // zwischen den Implementierungen der Skriptsprachen gibt.
+
     //PHP
     //let result = await this.runner.runPhpAlgorithm(false);
     //C#
@@ -295,6 +300,5 @@ ApplicationInstance.prototype.moveStart = function () {
         this.gameMoveInx++;
     }
 }
-
 
 export default ApplicationInstance;

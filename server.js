@@ -38,10 +38,13 @@ if (process.env.NODE_ENV != "development") {
     })
 }
 
-
 app.use('/_framework', express.static("prod-csharp/_framework"));
 app.get('/favicon.ico', function (req, res) {    
     res.end();
+})
+
+app.get('/dotnet.wasm', function (req, res) {    
+    res.sendFile(path.join(__dirname, 'prod-csharp/_framework/wasm/dotnet.wasm'))
 })
 
 const PORT = process.env.PORT ||3000
